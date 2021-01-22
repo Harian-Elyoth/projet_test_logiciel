@@ -66,13 +66,40 @@ class test_http_client(unittest.TestCase):
 	# --------------------- #
 
 	# connection success 
-	def test_reach_server():
+	def test_reach_server(self):
 		pass
 
 	# --------------------- #
 	# TEST REQUEST FUNCTION #
 	# --------------------- #
 
+	# method is a string
+	def test_method_type(self):
+		pass
+
+	# method is GET or POST
+	def test_method_format(self):
+		pass
+
+	# endpoint is a string
+	def test_endpoint_type(self):
+		pass
+
+	# endpoint is something like /toto/titit
+	def test_endpoint_format(self):
+		pass
+
+	# body is a string
+	def test_body_type(self):
+		pass
+
+	# header is a dict
+	def test_header_type(self):
+		pass
+
+	# raise expection
+	def test_header_format(self):
+		pass
 
 	# called at end
 	def tearDown(self):
