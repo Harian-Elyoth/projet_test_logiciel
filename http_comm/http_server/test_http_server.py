@@ -33,11 +33,13 @@ class test_http_server(unittest.TestCase):
 	def test_port_allow(self):
 		pass
 
-
 	# -------------------- #
 	# TEST DO_GET FUNCTION #
 	# -------------------- #
 
+	# do a Get on the server
+	def test_get():
+		pass
 
 	# --------------------- #
 	# TEST DO_POST FUNCTION #
