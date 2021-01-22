@@ -9,9 +9,9 @@ class test_http_client(unittest.TestCase):
 	def setUp(self):
 		pass
 
-	# ---------------------- #
+	# --------------------- #
 	# TEST __NEW__ FUNCTION #
-	# ---------------------- #
+	# --------------------- #
 
 	# everything's fine
 	def test_new(self):
@@ -74,7 +74,8 @@ class test_http_client(unittest.TestCase):
 
 	# connection success 
 	def test_reach_server(self):
-		pass
+		http_client_test = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 20)
+		self.assertEqual(http_client_test.connect(), -1)
 
 	# --------------------- #
 	# TEST REQUEST FUNCTION #
