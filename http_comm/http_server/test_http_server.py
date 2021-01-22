@@ -37,7 +37,7 @@ class test_http_server(unittest.TestCase):
 	# TEST DO_GET FUNCTION #
 	# -------------------- #
 
-	# do a Get on the server
+	# do a GET on the server
 	def test_get():
 		pass
 
@@ -45,8 +45,9 @@ class test_http_server(unittest.TestCase):
 	# TEST DO_POST FUNCTION #
 	# --------------------- #
 
-
-
+	# do a POST on the server
+	def test_post():
+		pass
 
 if __name__ == '__main__':
 
