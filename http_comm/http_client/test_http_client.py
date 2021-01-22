@@ -65,6 +65,9 @@ class test_http_client(unittest.TestCase):
 	# TEST CONNECT FUNCTION #
 	# --------------------- #
 
+	# connection success 
+	def test_reach_server():
+		pass
 
 	# --------------------- #
 	# TEST REQUEST FUNCTION #
