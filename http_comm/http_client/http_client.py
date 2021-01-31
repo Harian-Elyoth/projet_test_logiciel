@@ -92,13 +92,13 @@ class http_client(object):
 
 	"""establish a connection with the server"""
 	def connect(self):
-		pass
+		self.http_conn = http.client.HTTPSConnection(self.ip_server, self.port_server, timeout=self.timeout)
 
-	""" make http requests (GET, POST)"""
+	"""make http requests (GET, POST)"""
 	def request(self, method, endpoint, body, header):
 		pass
 
 	# called when there not references anymore
 	def __del__(self):
-		print('exit')
 		# free ports
+		pass
