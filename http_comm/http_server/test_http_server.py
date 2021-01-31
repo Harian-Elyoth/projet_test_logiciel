@@ -86,7 +86,7 @@ class test_http_server(unittest.TestCase):
 
 	# do a GET on the server, endpoint not found
 	def test_get_not_found(self):
-		# CAN'T TEST WITHOUT A ACTIVE SERVER
+		# CAN'T TEST WITHOUT A ACTIVE SERVER, WAIT FOR THREAD OR MOCK
 		# url 	= "http://127.0.0.1:65500/room"
 		# resp 	= requests.get(url)
 
@@ -96,13 +96,27 @@ class test_http_server(unittest.TestCase):
 	# TEST DO_POST FUNCTION #
 	# --------------------- #
 
-	# do a POST on the server, everything's fine
-	def test_post(self):
-		pass
+		# do a POST on the server, everything's fine
+	def test_post():
+		# CAN'T TEST WITHOUT A ACTIVE SERVER, WAIT FOR THREAD OR MOCK
+		# url 	= "http://127.0.0.1:65500"
+		# payload = "test"
+		# headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+
+		# resp 	= requests.post(url, data=payload, headers=headers)
+
+		# self.assertEqual((int)(resp.status_code), 200)
 
 	# do a POST on the server, endpoint not found
-	def test_post_not_found(self):
-		pass
+	def test_post_not_found():
+		# CAN'T TEST WITHOUT A ACTIVE SERVER, WAIT FOR THREAD OR MOCK
+		# url 	= "http://127.0.0.1:65500/room"
+		# payload = "test"
+		# headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+
+		# resp 	= requests.post(url, data=payload, headers=headers)
+
+		# self.assertEqual((int)(resp.status_code), 404)
 
 if __name__ == '__main__':
 
