@@ -1,7 +1,7 @@
 # class for http client
 
 import http.client
-import urllib.request
+import urllib
 import socket
 
 class http_client(object):
@@ -46,7 +46,7 @@ class http_client(object):
 			return -6
 
 		# test timeout format
-		if timeout < 10 or timeout > 60:
+		if timeout < 1 or timeout > 60:
 			return -7
 
 		# test ip type
@@ -88,15 +88,38 @@ class http_client(object):
 		self.port_server 	= port_server
 		self.timeout		= timeout
 
-		self.http_conn		= http.client.HTTPConnection
-
-	"""establish a connection with the server"""
-	def connect(self):
-		self.http_conn = http.client.HTTPSConnection(self.ip_server, self.port_server, timeout=self.timeout)
+		self.http_conn 		= http.client.HTTPSConnection(self.ip_server, self.port_server, timeout=self.timeout)
 
 	"""make http requests (GET, POST)"""
-	def request(self, method, endpoint, body, header):
-		pass
+	def request(self, method, endpoint, header, body):
+		
+		if type(method) != str:
+			return -2
+
+		if method != 'GET' and method != 'POST':
+			return -3
+
+		if type(endpoint) != str:
+			return -4
+
+		path = endpoint.split('/')
+		if len(path) >= 2:
+			if path[0] != '':
+				return -5
+		else:
+			return -5
+
+		if type(body) != str:
+			return -6
+
+		if type(header) != dict:
+			return -7
+
+		try:
+			self.http_conn.request("GETT", "/")
+		except socket.timeout: 
+			print('caught a timeout')
+			
 
 	# called when there not references anymore
 	def __del__(self):
