@@ -1,6 +1,6 @@
 # Spécification des codes erreurs pour le serveur HTTP
 
-Fonction __init__ de http_serveur :
+Fonction __new__ de http_server :
 
 		-> 	0  : Tout s'est bien déroulé 
 		-> -1  : L'adresse IP n'a pas le bon type 
