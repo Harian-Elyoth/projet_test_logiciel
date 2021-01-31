@@ -5,7 +5,19 @@ import unittest
 from http_server import *
 
 # library for launch requests on a server
-import requests 			
+import requests
+
+import threading
+
+# def create_right_serv():
+# 	ip 		= "127.0.0.1"
+# 	port 	= 65500
+		
+# 	serv 	= http_server(ip, port)
+
+# f = lambda ip,port: http_server(ip, port)
+
+# threading.Thread(target=f("127.0.0.1", 65500)).start()
 
 class test_http_server(unittest.TestCase):
 
@@ -51,11 +63,34 @@ class test_http_server(unittest.TestCase):
 
 	# do a GET on the server, everything's fine
 	def test_get(self):
-		pass
+
+		# TRY CREATE THREAD TO LAUNCH SERVER WHILE TESTING
+		# def create_right_serv():
+		# 	ip 		= "127.0.0.1"
+		# 	port 	= 65500
+				
+		# 	serv 	= http_server(ip, port)
+
+		# 	try:
+		# 		serv.http_serv.serve_forever()
+		# 	except KeyboardInterrupt:
+		# 		pass
+
+		# threading.Thread(target=create_right_serv).start()
+
+		# TESTING
+		# url 	= "http://127.0.0.1:65500"
+		# resp 	= requests.get(url)
+
+		# self.assertEqual((int)(resp.status_code), 200)
 
 	# do a GET on the server, endpoint not found
 	def test_get_not_found(self):
-		pass
+		# CAN'T TEST WITHOUT A ACTIVE SERVER
+		# url 	= "http://127.0.0.1:65500/room"
+		# resp 	= requests.get(url)
+
+		# self.assertEqual((int)(resp.status_code), 404)
 
 	# --------------------- #
 	# TEST DO_POST FUNCTION #
