@@ -2,9 +2,9 @@
 
 import unittest
 from http_client import *
+from mock import *
 
 class test_http_client(unittest.TestCase):
-
 	# called at start
 	def setUp(self):
 		pass
@@ -77,70 +77,78 @@ class test_http_client(unittest.TestCase):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		self.assertEqual(good_client_class.request('GET', '/', good_header, ''), 0)
+		with patch('http_client.http.client.HTTPSConnection.request') as mock_request:
+			with patch('http_client.http.client.HTTPSConnection.getresponse') as mock_getresponse:
+				mock_getresponse.return_value.status = 200
+				mock_getresponse.return_value.read.return_value = "test : OK"
+
+				self.assertEqual(good_client_class.request('GET', '/', good_header, ''), (0, "test : OK"))
 
 	# everything's fine
 	def test_request_post(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
-		
-		self.assertEqual(good_client_class.request('POST', '/', good_header, 'Hello Server !'), 0)
+
+		with patch('http_client.http.client.HTTPSConnection.request') as mock_request:
+			with patch('http_client.http.client.HTTPSConnection.getresponse') as mock_getresponse:
+				mock_getresponse.return_value.status = 200
+				mock_getresponse.return_value.read.return_value = "test : OK"
+
+				self.assertEqual(good_client_class.request('POST', '/', good_header, 'Hello Server !'), (0, "test : OK"))
 
 	# connection failed
 	def test_server_unreachable(self):
 		bad_client_class = http_client("127.0.0.1", 65500, "192.168.47.0", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		self.assertEqual(bad_client_class.request('GET', '/', good_header, ''), -1)
+		with patch('http_client.http.client.HTTPSConnection.request') as mock_request:
+			with patch('http_client.http.client.HTTPSConnection.getresponse') as mock_getresponse:
+				mock_getresponse.return_value.status = 404
+				mock_getresponse.return_value.read.return_value = "test : KO"
+
+				self.assertEqual(bad_client_class.request('GET', '/', good_header, ''), (-8, "test : KO"))
 
 	# method is a string
 	def test_method_type(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		self.assertEqual(good_client_class.request(0, '/', good_header, ''), -2)
+		self.assertEqual(good_client_class.request(0, '/', good_header, ''), (-2, ""))
 
 	# method is GET or POST
 	def test_method_format(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		self.assertEqual(good_client_class.request('GETE', '/', good_header, ''), -3)
+		self.assertEqual(good_client_class.request('GETE', '/', good_header, ''), (-3, ""))
 
 	# endpoint is a string
 	def test_endpoint_type(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		self.assertEqual(good_client_class.request('GET', 0, good_header, ''), -4)
+		self.assertEqual(good_client_class.request('GET', 0, good_header, ''), (-4, ""))
 
 	# endpoint is something like /toto/titit
 	def test_endpoint_format(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
-		
-		self.assertEqual(good_client_class.request('GET', 'bad_endpoint', good_header, ''), -5)
+
+		self.assertEqual(good_client_class.request('GET', 'bad_endpoint', good_header, ''), (-5, ""))
 
 	# body is a string
 	def test_body_type(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 10)
 		print(good_client_class)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
-		
-		self.assertEqual(good_client_class.request('GET', '/', good_header, 0), -6)
+
+		self.assertEqual(good_client_class.request('GET', '/', good_header, 0), (-6, ""))
 
 	# header is a dict
 	def test_header_type(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 
-		self.assertEqual(good_client_class.request('GET', '/', 0, ''), -7)
-
-	# raise expection
-	def test_header_format(self):
-		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
-		bad_header  = {"Cntent-typ": "pp/x-www-form-urlencoded", "ccept": "txtu/plin"}
-
-		self.assertEqual(good_client_class.request('GET', '/', bad_header, ''), -8)
+		self.assertEqual(good_client_class.request('GET', '/', 0, ''), (-7, ""))
 
 	###################
 
