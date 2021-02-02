@@ -5,7 +5,7 @@ import urllib
 import socket
 
 class http_client(object):
-	
+
 	"""docstring for http_client"""
 
 	# called when creating instance, return an object (can be an integer)
@@ -24,7 +24,7 @@ class http_client(object):
 		if len(ip_server_bytes) == 4:
 			for ip_server_byte in ip_server_bytes:
 				int_ip_server_byte = int(ip_server_byte)
-				
+
 				if int_ip_server_byte < 0 or int_ip_server_byte > 255:
 					return -2
 		else:
@@ -60,7 +60,7 @@ class http_client(object):
 		if len(ip_bytes) == 4:
 			for ip_byte in ip_bytes:
 				int_ip_byte = int(ip_byte)
-				
+
 				if int_ip_byte < 0 or int_ip_byte > 255:
 					return -9
 		else:
@@ -92,34 +92,45 @@ class http_client(object):
 
 	"""make http requests (GET, POST)"""
 	def request(self, method, endpoint, header, body):
-		
+
 		if type(method) != str:
-			return -2
+			return (-2, "")
 
 		if method != 'GET' and method != 'POST':
-			return -3
+			return (-3, "")
 
 		if type(endpoint) != str:
-			return -4
+			return (-4, "")
 
 		path = endpoint.split('/')
 		if len(path) >= 2:
 			if path[0] != '':
-				return -5
+				return (-5, "")
 		else:
-			return -5
+			return (-5, "")
 
 		if type(body) != str:
-			return -6
+			return (-6, "")
 
 		if type(header) != dict:
-			return -7
+			return (-7, "")
 
 		try:
-			self.http_conn.request("GETT", "/")
-		except socket.timeout: 
+			if method == 'GET':
+				self.http_conn.request(method, endpoint)
+			elif method == 'POST':
+				self.http_conn.request(method, endpoint, body, header)
+
+			resp = self.http_conn.getresponse()
+
+			if(resp.status == 200):
+				return (0, resp.read())
+			else:
+				return (-8, "test : KO")
+
+		except socket.timeout:
 			print('caught a timeout')
-			
+			return (-9, "test : KO")
 
 	# called when there not references anymore
 	def __del__(self):
