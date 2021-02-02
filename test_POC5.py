@@ -14,7 +14,7 @@ from POC5 import create_room
 from POC5 import invite_user
 #MESSAGE RELATED
 from POC5 import send_to_all
-
+from POC5 import send_to
 
 class TestQuickToolsMethods(unittest.TestCase):
 
@@ -100,3 +100,13 @@ class TestQuickToolsMethods(unittest.TestCase):
         self.assertFalse(send_to_all("send to all"))
         # si l'utilisateur a confondu deux fonctions alors la fonction doit renvoyer False
         self.assertFalse(send_to_all("sendto other_user_name"))
+
+    def test_send_to(self):
+        # si l'utilisateur a tapé "sendto [other user name]" alors la fonction doit renvoyer True
+        self.assertTrue(send_to("sendto other_user_name"))
+        # si l'utilisateur a oublié un argument alors la fonction doit renvoyer False
+        self.assertFalse(send_to_all("sendto"))
+        # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
+        self.assertFalse(send_to_all("send to "))
+        # si l'utilisateur a confondu deux fonctions alors la fonction doit renvoyer False
+        self.assertFalse(send_to_all("sendtoall other_user_name"))

@@ -30,3 +30,6 @@ def invite_user(motcle):
 
 def send_to_all(motcle):
     return True
+
+def send_to(motcle):
+    return True
