@@ -7,45 +7,38 @@ c = conn.cursor()
 #download the db in POC3
 db_path = 'chatsystem.db'
 
-c.execute('DROP TABLE IF EXISTS User;')
-sql = 'CREATE TABLE User (idUser INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, password TEXT NOT NULL)'
-c.execute(sql)
-sql = 'INSERT INTO User (username,password) VALUES ("LIU","password")'
-# c.execute(sql)
-# c.execute('CREATE TABLE Room (idRoom INTEGER PRIMARY KEY AUTOINCREMENT, roomName TEXT);')
-# c.execute('CREATE TABLE Room_User_Table (idRoom INTEGER, idUser INTEGER);')
-# c.execute('CREATE TABLE Message (sendingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, idRoom INTEGER, idUser INTEGER, content TEXT);')
 
+#CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, adminStatus BOOLEAN);
 mysql = MySQL('chatsystem.db')
 
 class TestDB(unittest.TestCase):
 	def test_A_user_select(self):
 		ex1 = mysql.select("127.0.0.1:8888/User")
 		ex2 = mysql.select("127.0.0.1:8888/User/username")
-		ex3 = mysql.select("127.0.0.1:8888/User/username/password")
+		ex3 = mysql.select("127.0.0.1:8888/User/username/password/'MissEmma'")
 
 		ex1_1 = [ex[1] for ex in ex1]
 		ex2_1 = [ex[0] for ex in ex2]
 		ex3_1 = [ex[0] for ex in ex3]
 
-		self.assertEqual(ex1_1,["LIU"])
-		self.assertEqual(ex2_1,["LIU"])
-		self.assertEqual(ex3_1,["LIU"])
+		self.assertEqual(ex1_1,['Emma'])
+		self.assertEqual(ex2_1,['MissEmma'])
+		self.assertEqual(ex3_1,['jhLO7649'])
 
 	def test_B_user_insert(self):
-		query = "{'username': ['WANG'], 'password': ['password1']}"
+		query = "{'firstName':['Yingshan'],'lastName':['LIU'],'username': ['yingshan'], 'password': ['password1'],'adminStatus': [false]}"
 		mysql.insert("127.0.0.1:8888/User",query)
 
-		sql = "select username from User where username = 'WANG';"
+		sql = "select username from User where username = 'yingshan';"
 		name = ''
 		for row in c.execute(sql):
 			name = row[0]
-		self.assertEqual(name,'WANG')
+		self.assertEqual(name,'yingshan')
 
 	def test_C_user_delete(self):
-		mysql.delete("127.0.0.1:8888/User/username/'WANG'")
+		mysql.delete("127.0.0.1:8888/User/username/'yingshan'")
 
-		sql = "select username from User where username = 'WANG';"
+		sql = "select username from User where username = 'yingshan';"
 		none = ''
 		for row in c.execute(sql):
 			none = row[0]
@@ -60,7 +53,7 @@ class TestDB(unittest.TestCase):
 		self.assertEqual(ex1_1,[1,2,3])
 		self.assertEqual(ex2_1,["Emergency meeting","Daily news","Weekly report"])
 	def test_E_room_delete(self):
-		mysql.delete("127.0.0.1:8888/Room/'Emergency meeting'")
+		mysql.delete("127.0.0.1:8888/Room/roomName/'Emergency meeting'")
 
 		sql = "select username from User where roomName = 'Emergency meeting';"
 		none = ''
@@ -80,7 +73,7 @@ class TestDB(unittest.TestCase):
 #
 	def test_G_table_select(self):
 		#Known room_id, return the record
-		ex1 = mysql.select("127.0.0.1:8888/Room_User_Table/1")
+		ex1 = mysql.select("127.0.0.1:8888/Room_User_Table/1/idUser/idRoom")
 
 		ex1_1 = [ex[1] for ex in ex1]
 
@@ -97,7 +90,7 @@ class TestDB(unittest.TestCase):
 		self.assertEqual(name,5)
 
 	def test_I_table_delete(self):
-		mysql.delete("127.0.0.1:8888/Room_User_Table/5")
+		mysql.delete("127.0.0.1:8888/Room_User_Table/idRoom/5")
 
 		sql = "select idRoom from Room_User_Table where idRoom = 5;"
 		none = ''
