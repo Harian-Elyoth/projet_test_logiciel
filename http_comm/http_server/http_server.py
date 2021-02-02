@@ -1,5 +1,3 @@
-# class for http server
-
 import http.server
 
 class handler_http_serv(http.server.BaseHTTPRequestHandler):
@@ -90,21 +88,20 @@ class http_server(object):
 		except:
 			print("Exception in http.server.ThreadingHTTPServer(..)")
 
-		# try:
-		# 	http_serv.serve_forever()
-		# except KeyboardInterrupt:
-		# 	print("Exception in serve_forever()")
+	def run(self):
+		try:
+			self.http_serv.serve_forever()
+		except KeyboardInterrupt:
+			print("Exception in serve_forever()")
+		
 		
 	"""called when there not references anymore to close the server"""
 	def __del__(self):
 		self.http_serv.server_close()
-		pass
+		# pass
 
 if __name__ == '__main__':
 
 	serv_test = http_server("127.0.0.1", 60000)
 
-	try:
-		serv_test.http_serv.serve_forever()
-	except KeyboardInterrupt:
-		print("Exception in serve_forever()")
+	serv_test.run()
