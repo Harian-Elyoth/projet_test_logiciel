@@ -14,9 +14,9 @@ DROP TABLE IF EXISTS Room_User_Table;  -- Table des accès accordées aux utilis
 DROP TABLE IF EXISTS Message;          -- Tables contenant les messages (historique)
 
 -- commandes de création des tables
-CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, /*accessLevel INTEGER*/);
+CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, adminStatus BOOLEAN);
 
-CREATE TABLE Room (id INTEGER PRIMARY KEY AUTOINCREMENT, roomName TEXT, /*requiredAccessLevel INTEGER*/);
+CREATE TABLE Room (id INTEGER PRIMARY KEY AUTOINCREMENT, roomName TEXT);
 
 CREATE TABLE Room_User_Table (idRoom INTEGER, idUser INTEGER);
 
