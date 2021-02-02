@@ -9,13 +9,13 @@ Fonction __new__ de http_server :
 		-> -4  : Le port n'est pas entre 0 et 65535
 		-> -5  : Le port est indisponible
 
-Fontion do_GET de http_client :
+Fontion do_GET de handler_http_serv :
 
-		->  0 : Tout s'est bien déroulé
-		-> -1 : Le GET a échoué
+		->  200 : Le endpoint est correct
+		->  404 : Le endpoint est incorrect
 
-Fonction do_POST de http_client :
+Fonction do_POST de handler_http_serv :
 
-		->  0  : Tout s'est bien déroulé
-		-> -1  : Le POST a échoué
+		->  200 : Le endpoint est correct
+		->  404 : Le endpoint est incorrect
 
