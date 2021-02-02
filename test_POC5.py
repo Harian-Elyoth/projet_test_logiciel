@@ -10,6 +10,7 @@ from POC5 import exit
 from POC5 import print_public_room
 from POC5 import print_private_room
 from POC5 import delete_room
+from POC5 import create_room
 
 
 
@@ -61,10 +62,18 @@ class TestQuickToolsMethods(unittest.TestCase):
         # si l'utilisateur a tapé "private" suivi d'un autre mot alors la fonction doit renvoyer False
         self.assertFalse(print_private_room("private room"))
 
-    def test_delete_room(self) :
+    def test_delete_room(self):
         # si l'utilisateur a tapé "delete [num_room]" alors la fonction doit renvoyer True
-        self.assertTrue(test_delete_room("delete 5"))
+        self.assertTrue(delete_room("delete 5"))
         # si l'utilisateur a tapé "delete" seulement alors la fonction doit renvoyer False
-        self.assertFalse(test_delete_room("delete"))
+        self.assertFalse(delete_room("delete"))
         # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
-        self.assertFalse(test_delete_room("delte"))
+        self.assertFalse(delete_room("delte"))
+
+    def test_create_room(self):
+        # si l'utilisateur a tapé "room" alors la fonction doit renvoyer True
+        self.assertTrue(create_room("room"))
+        # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
+        self.assertFalse(create_room("rome"))
+        # si l'utilisateur a rajouté un argument alors la fonction doit renvoyer False
+        self.assertFalse(create_room("room 2"))

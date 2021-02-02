@@ -21,3 +21,6 @@ def print_private_room(motcle):
 
 def delete_room(motcle):
     return True
+
+def create_room(motcle):
+    return True
