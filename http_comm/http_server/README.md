@@ -11,11 +11,11 @@ Fonction __new__ de http_server :
 
 Fontion do_GET de handler_http_serv :
 
-		->  200 : Le endpoint est correct
-		->  404 : Le endpoint est incorrect
+		->  0 : Le endpoint est correct
+		-> -1 : Le endpoint est incorrect
 
 Fonction do_POST de handler_http_serv :
 
-		->  200 : Le endpoint est correct
-		->  404 : Le endpoint est incorrect
+		->  0 : Le endpoint est correct
+		-> -1 : Le endpoint est incorrect
 
