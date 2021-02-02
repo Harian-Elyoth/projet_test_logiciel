@@ -9,3 +9,9 @@ def create_user(motcle):
 
 def connect_user(motcle):
     return True
+
+def exit(motcle):
+    return True
+
+def print_public_room(motcle):
+    return True
