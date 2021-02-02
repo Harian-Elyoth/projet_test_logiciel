@@ -24,3 +24,6 @@ def delete_room(motcle):
 
 def create_room(motcle):
     return True
+    
+def invite_user(motcle):
+    return True
