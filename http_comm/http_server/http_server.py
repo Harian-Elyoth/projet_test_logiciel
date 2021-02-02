@@ -15,7 +15,10 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	# handle POST request
 	def do_POST(self):
-		pass
+		self.send_response(200)
+		self.send_header("Content-type", "text/html")
+		self.end_headers()
+		# pass
 
 class http_server(object):
 
@@ -25,6 +28,35 @@ class http_server(object):
 	def __new__(self, ip, port):
 
 		# TESTS on parameters
+
+		# test ip type
+		if type(ip) != str:
+			return -1
+
+		# test ip_server format
+		ip_bytes = []
+		ip_bytes = ip.split(".")
+
+		if len(ip_bytes) == 4:
+			for ip_byte in ip_bytes:
+				int_ip_byte = int(ip_byte)
+				
+				if int_ip_byte < 0 or int_ip_byte > 255:
+					return -2
+		else:
+			return -2
+
+		# test port type
+		if type(port) != int:
+			return -3
+
+		# test port format
+		if port > 0 and port < 65535:
+			if port < 49152:
+				return -5
+		else:
+			return -4
+
 		return super(http_server, self).__new__(self)
 
 	# called for initialize object (after new), return None
