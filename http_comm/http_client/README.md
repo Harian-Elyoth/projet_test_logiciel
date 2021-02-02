@@ -2,7 +2,7 @@
 
 Fonction __new__ de http_client :
 
-		->	0  : Tout s'est bien déroulé
+		->  0  : Tout s'est bien déroulé
 		-> -1  : L'adresse IP du serveur n'a pas le bon type
 		-> -2  : L'adresse IP du serveur n'a pas le bon format
 		-> -3  : Le port du serveur n'a pas le bon type
@@ -18,7 +18,7 @@ Fonction __new__ de http_client :
 
 Fonction request de http_client :
 
-		->	0  : Tout s'est bien déroulé
+		->  0  : Tout s'est bien déroulé
 		-> -1  : Le client n'a pas réussi à se connecter au serveur
 		-> -2  : La methode du serveur n'a pas le bon type
 		-> -3  : La methode du serveur n'est ni GET ni POST
