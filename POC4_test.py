@@ -98,6 +98,33 @@ class TestDB(unittest.TestCase):
 			none = row[0]
 		self.assertEqual(none,'')
 
+	def test_J_message_select(self):
+		#Known room_id, return the record
+		ex1 = mysql.select("127.0.0.1:8888/Message/1/content/idRoom")
+
+		ex1_1 = [ex[0] for ex in ex1]
+
+		self.assertEqual(ex1_1,["Philippe, you must call the IT department"])
+
+	def test_K_message_insert(self):
+		query = "{'idRoom': [1], 'idUser': [2],'content':['OK,I will call them']}"
+		mysql.insert("127.0.0.1:8888/Message",query)
+
+		sql = "select content from Message where content = 'OK,I will call them';"
+		name = ''
+		for row in c.execute(sql):
+			name = row[0]
+		self.assertEqual(name,'OK,I will call them')
+
+	def test_L_message_delete(self):
+		mysql.delete("127.0.0.1:8888/Message/idUser/1")
+
+		sql = "select content from Message where idUser = 1;"
+		none = ''
+		for row in c.execute(sql):
+			none = row[0]
+		self.assertEqual(none,'')
+
 if __name__ == '__main__':
 	unittest.main()
 	conn.commit()
