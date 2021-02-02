@@ -1,8 +1,8 @@
 # test class for http client
 
 import unittest
-from http_client import *
-from mock import *
+from http_client import http_client
+from mock import patch
 
 class test_http_client(unittest.TestCase):
 	# called at start
@@ -158,5 +158,4 @@ class test_http_client(unittest.TestCase):
 
 
 if __name__ == '__main__':
-
 	unittest.main()
