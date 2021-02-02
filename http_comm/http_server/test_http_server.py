@@ -1,11 +1,10 @@
-# test class for http server
-
 import shutil
 import shlex
 import unittest
 import subprocess
 import time
 import requests
+from mock import patch
 
 from http_server import handler_http_serv, http_server
 
@@ -19,19 +18,7 @@ class test_http_server(unittest.TestCase):
 
 	# everything's fine
 	def test_new(self):
-		# THREAD OU MOCK
-
-		command = 'python3.9 http_server.py'
-		args = shlex.split(command)
-
-		p = subprocess.Popen(args) # lauch command as a subprocess
-
-		self.list_subprocess.append(p)
-		time.sleep(2) # wait for the server to be properly init
-
-		self.kill_subprocess()
-
-		# self.assertEqual(type(http_server("127.0.0.1", 65500)), http_server)
+		self.assertEqual(type(http_server("127.0.0.1", 60000)), http_server)
 
 	# ip is a string
 	def test_ip_type(self):
@@ -61,6 +48,37 @@ class test_http_server(unittest.TestCase):
 
 	# do a GET on the server, everything's fine
 	def test_get(self):
+
+		# with patch('http_server.handler_http_serv.do_GET') as mock_handler_get:
+		# 	mock_handler_get.return_value = 0
+
+		# 	url 	= "http://127.0.0.1:60000"
+		# 	resp 	= requests.get(url)
+		pass
+
+	# do a GET on the server, endpoint not found
+	def test_get_not_found(self):
+		pass
+
+	# --------------------- #
+	# TEST DO_POST FUNCTION #
+	# --------------------- #
+
+	# do a POST on the server, everything's fine
+	def test_post(self):
+		pass
+
+	# do a POST on the server, endpoint not found
+	def test_post_not_found(self):
+		pass
+
+
+	# -------------------------------- #
+	# TEST FUNCTIONNAL DO_GET FUNCTION #
+	# -------------------------------- #
+
+	# do a GET on the server, everything's fine
+	def test_functionnal_get(self):
 		command = 'python3.9 http_server.py'
 		args = shlex.split(command)
 
@@ -79,7 +97,7 @@ class test_http_server(unittest.TestCase):
 		# pass
 
 	# do a GET on the server, endpoint not found
-	def test_get_not_found(self):
+	def test_functionnal_get_not_found(self):
 
 		command = 'python3.9 http_server.py'
 		args = shlex.split(command)
@@ -98,12 +116,12 @@ class test_http_server(unittest.TestCase):
 
 		# pass
 
-	# --------------------- #
-	# TEST DO_POST FUNCTION #
-	# --------------------- #
+	# --------------------------------- #
+	# TEST FUNCTIONNAL DO_POST FUNCTION #
+	# --------------------------------- #
 
 	# do a POST on the server, everything's fine
-	def test_post(self):
+	def test_functionnal_post(self):
 		
 		command = 'python3.9 http_server.py'
 		args = shlex.split(command)
@@ -125,7 +143,7 @@ class test_http_server(unittest.TestCase):
 		# pass
 
 	# do a POST on the server, endpoint not found
-	def test_post_not_found(self):
+	def test_functionnal_post_not_found(self):
 
 		command = 'python3.9 http_server.py'
 		args = shlex.split(command)
@@ -145,6 +163,8 @@ class test_http_server(unittest.TestCase):
 
 		self.kill_subprocess()
 		# pass
+
+	# --------------------------------- #
 
 	def kill_subprocess(self):
 		while len(self.list_subprocess) != 0 :
