@@ -12,6 +12,8 @@ from POC5 import print_private_room
 from POC5 import delete_room
 from POC5 import create_room
 from POC5 import invite_user
+#MESSAGE RELATED
+from POC5 import send_to_all
 
 
 class TestQuickToolsMethods(unittest.TestCase):
@@ -85,6 +87,14 @@ class TestQuickToolsMethods(unittest.TestCase):
         self.assertFalse(invite_user("invite 5 4"))
         #si l'utilisateur inverse l'ordre des arguments :
         self.assertFalse(invite_user("invite 5 other_user_name"))
-        #si l'utilisateur oublie un argument alors la fontion doit renvoyer False:
+        #si l'utilisateur oublie un argument alors la fonction doit renvoyer False
         self.assertFalse(invite_user("invite other_user_name"))
         self.assertFalse(invite_user("invite 5"))
+
+    def test_send_to_all(self):
+        # si l'utilisateur a tapé "sendtoall" alors la fonction doit renvoyer True
+        self.assertTrue(send_to_all("sendtoall"))
+        # si l'utilisateur a rajouté un argument alors la fonction doit renvoyer False
+        self.assertFalse(send_to_all("sendtoall 5"))
+        # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
+        self.assertFalse(send_to_all("send to all"))
