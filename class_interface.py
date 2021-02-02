@@ -17,7 +17,7 @@ class MySQL():
 			req = "select * from %s" %(elem[1])
 		elif len(elem) == 3:
 			req = "select %s from %s" %(elem[2],elem[1])
-		elif len(elem) == 4:
+		elif len(elem) == 5:
 			req = "select %s from %s where %s=%s" %(elem[3],elem[1],elem[4],elem[2])
 		return self.c.execute(req).fetchall()
 	
