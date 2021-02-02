@@ -98,3 +98,5 @@ class TestQuickToolsMethods(unittest.TestCase):
         self.assertFalse(send_to_all("sendtoall 5"))
         # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
         self.assertFalse(send_to_all("send to all"))
+        # si l'utilisateur a confondu deux fonctions alors la fonction doit renvoyer False
+        self.assertFalse(send_to_all("sendto other_user_name"))
