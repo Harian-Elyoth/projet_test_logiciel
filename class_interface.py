@@ -1,129 +1,52 @@
-from class_interface import MySQL
-import unittest,os,sys,sqlite3
+import urllib.parse, sqlite3
 
 
+class MySQL():
+	def __init__(self, name):
+		self.c = None
+		self.req = None
+		self.conn = sqlite3.connect(name)
+		self.c = self.conn.cursor()
 
+	def __exit__(self, exc_type, exc_value, traceback):
+		self.conn.close()
 
+	def select(self,path):
+		elem = path.split('/')
+		if len(elem) == 2:
+			req = "select * from %s" %(elem[1])
+		elif len(elem) == 3:
+			req = "select %s from %s" %(elem[2],elem[1])
+		elif len(elem) == 5:
+			req = "select %s from %s where %s=%s" %(elem[2],elem[1],elem[3],elem[4])
+		return self.c.execute(req).fetchall()
+	
+	def insert(self,path,query):
+		# print("query")
+		# print(query)
+		# print("")
+		attr = ', '.join(query.keys())
+		val = ', '.join('"%s"' %v[0] for v in query.values())
+		# print('attr')
+		# print(attr)
+		# print("")
+		# print('val')
+		# print(val)
+		# print("")
+		req = "insert into %s (%s) values (%s)" %(path.split('/')[1], attr, val)
+		# print('req')
+		# print(req)
+		# print("")
+		self.c.execute(req)
+		self.conn.commit()
 
-
-
-# CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, adminStatus BOOLEAN);
-mysql = MySQL('my.db')
-
-class TestDB(unittest.TestCase):
-	def test_A_user_select(self):
-		ex1 = mysql.select("127.0.0.1:8888/User")
-		ex2 = mysql.select("127.0.0.1:8888/User/username")
-		ex3 = mysql.select("127.0.0.1:8888/User/password/username/'MissEmma'")
-		ex1_1 = [ex[1] for ex in ex1]
-		ex2_1 = [ex[0] for ex in ex2]
-		ex3_1 = [ex[0] for ex in ex3]
-
-		self.assertEqual(ex1_1,['John', 'Jane', 'Philippe', 'Karine', 'Theo', 'Emma'])
-		self.assertEqual(ex2_1,['Dr.JD', 'MsJD', 'Durandil', 'Kami', 'Ostheoporose', 'MissEmma'])
-		self.assertEqual(ex3_1,['jhLO7649'])
-
-	def test_B_user_insert(self):
-		query = {'firstName':['Yingshan'],'lastName':['LIU'],'username': ['yingshan'], 'password': ['password1'],'adminStatus': [0]}
-		mysql.insert("127.0.0.1:8888/User",query)
-
-		sql = "select username from User where username = 'yingshan';"
-		name = ''
-		for row in mysql.select("127.0.0.1:8888/User/username/username/'yingshan'"):
-			name = row[0]
-		self.assertEqual(name,'yingshan')
-
-	def test_C_user_delete(self):
-		mysql.delete("127.0.0.1:8888/User/username/'yingshan'")
-
-		sql = "select username from User where username = 'yingshan';"
-		none = ''
-		for row in mysql.select("127.0.0.1:8888/User/username/username/'yingshan'"):
-			none = row[0]
-		self.assertEqual(none,'')
-	def test_D_room_select(self):
-
-		ex1 = mysql.select("127.0.0.1:8888/Room")
-		ex2 = mysql.select("127.0.0.1:8888/Room/roomName")
-		ex1_1 = [ex[0] for ex in ex1]
-		ex2_1 = [ex[0] for ex in ex2]
-
-		self.assertEqual(ex1_1,[1, 2, 3])
-		self.assertEqual(ex2_1,["Emergency meeting","Daily news","Weekly report"])
-	def test_E_room_delete(self):
-		mysql.delete("127.0.0.1:8888/Room/roomName/'Emergency meeting'")
-
-		sql = "select id from Room where roomName = 'Emergency meeting';"
-		none = ''
-		for row in mysql.select("127.0.0.1:8888/Room/roomName/roomName/'Emergency meeting'"):
-			none = row[0]
-		self.assertEqual(none,'')
-
-	def test_F_room_insert(self):
-		query = {'roomName': ['My meeting']}
-		mysql.insert("127.0.0.1:8888/Room",query)
-
-		# sql = "select roomName from Room where roomName = 'Emergency meeting';"
-		name = ''
-		for row in mysql.select("127.0.0.1:8888/Room/roomName/roomName/'My meeting'"):
-			name = row[0]
-		self.assertEqual(name,'My meeting')
-#
-	def test_G_table_select(self):
-		#Known room_id, return the record
-		ex1 = mysql.select("127.0.0.1:8888/Room_User_Table/idUser/idRoom/1")
-
-		ex1_1 = [ex[0] for ex in ex1]
-
-		self.assertEqual(ex1_1,[1,2])
-
-	def test_H_table_insert(self):
-		query = {'idRoom': [5], 'idUser': [1]}
-		mysql.insert("127.0.0.1:8888/Room_User_Table",query)
-
-		sql = "select idRoom from Room_User_Table where idRoom = 5;"
-		name = ''
-		for row in mysql.select("127.0.0.1:8888/Room_User_Table/idRoom/idRoom/5"):
-			name = row[0]
-		self.assertEqual(name,5)
-
-	def test_I_table_delete(self):
-		mysql.delete("127.0.0.1:8888/Room_User_Table/idRoom/5")
-
-		sql = "select idRoom from Room_User_Table where idRoom = 5;"
-		none = ''
-		for row in mysql.select("127.0.0.1:8888/Room_User_Table/idRoom/idRoom/5"):
-			none = row[0]
-		self.assertEqual(none,'')
-
-	def test_J_message_select(self):
-		#Known room_id, return the record
-		ex1 = mysql.select("127.0.0.1:8888/Message/content/idRoom/1")
-		# print(ex1)
-		ex1_1 = [ex[0] for ex in ex1]
-
-		self.assertEqual(ex1_1,["Philippe, you must call the IT department"])
-
-	def test_K_message_insert(self):
-		query = {'idRoom': [1], 'idUser': [2],'content':['OK,I will call them']}
-		mysql.insert("127.0.0.1:8888/Message",query)
-
-		sql = "select content from Message where content = 'OK,I will call them';"
-		name = ''
-		for row in mysql.select("127.0.0.1:8888/Message/content/content/'OK,I will call them'"):
-			name = row[0]
-		self.assertEqual(name,'OK,I will call them')
-
-	def test_L_message_delete(self):
-		mysql.delete("127.0.0.1:8888/Message/idUser/1")
-
-		sql = "select content from Message where idUser = 1;"
-		none = ''
-		for row in mysql.select("127.0.0.1:8888/Message/content/idUser/1"):
-			none = row[0]
-		self.assertEqual(none,'')
-
-if __name__ == '__main__':
-	unittest.main()
-	conn.commit()
-	conn.close()
+	def delete(self,path):
+		elem = path.split('/')
+		if len(elem) == 2:
+			req = "delete * from %s" %(elem[1])#
+		elif len(elem) == 3:
+			req = "alter table %s drop column %s" %(elem[1],elem[2])
+		elif len(elem) == 4:
+			req = "delete from %s where %s=%s" %(elem[1],elem[2],elem[3])
+		self.c.execute(req)
+		self.conn.commit()
