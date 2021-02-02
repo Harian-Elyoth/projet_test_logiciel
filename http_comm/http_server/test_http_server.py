@@ -1,29 +1,17 @@
 # test class for http server
 
+import shutil
+import shlex
 import unittest
-
-from http_server import *
-
-# library for launch requests on a server
+import subprocess
+import time
 import requests
 
-import threading
-
-# def create_right_serv():
-# 	ip 		= "127.0.0.1"
-# 	port 	= 65500
-		
-# 	serv 	= http_server(ip, port)
-
-# f = lambda ip,port: http_server(ip, port)
-
-# threading.Thread(target=f("127.0.0.1", 65500)).start()
+from http_server import handler_http_serv, http_server
 
 class test_http_server(unittest.TestCase):
 
-	# called at start
-	def setUp(self):
-		pass
+	list_subprocess = []
 
 	# --------------------- #
 	# TEST __NEW__ FUNCTION #
@@ -32,8 +20,18 @@ class test_http_server(unittest.TestCase):
 	# everything's fine
 	def test_new(self):
 		# THREAD OU MOCK
-		# self.assertEqual(http_server("127.0.0.1", 65500), 0)
-		pass
+
+		command = 'python3.9 http_server.py'
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(2) # wait for the server to be properly init
+
+		self.kill_subprocess()
+
+		# self.assertEqual(type(http_server("127.0.0.1", 65500)), http_server)
 
 	# ip is a string
 	def test_ip_type(self):
@@ -54,8 +52,8 @@ class test_http_server(unittest.TestCase):
 
 	# port is available : 49152 - 65535
 	def test_port_allow(self):
-		self.assertEqual(http_server("127.0.0.1",    15), -4)
-		self.assertEqual(http_server("127.0.0.1", 65800), -4)
+		self.assertEqual(http_server("127.0.0.1",    15), -5)
+		self.assertEqual(http_server("127.0.0.1", 48800), -5)
 
 	# -------------------- #
 	# TEST DO_GET FUNCTION #
@@ -63,60 +61,96 @@ class test_http_server(unittest.TestCase):
 
 	# do a GET on the server, everything's fine
 	def test_get(self):
+		command = 'python3.9 http_server.py'
+		args = shlex.split(command)
 
-		# TRY CREATE THREAD TO LAUNCH SERVER WHILE TESTING
-		# def create_right_serv():
-		# 	ip 		= "127.0.0.1"
-		# 	port 	= 65500
-				
-		# 	serv 	= http_server(ip, port)
+		p = subprocess.Popen(args) # lauch command as a subprocess
 
-		# 	try:
-		# 		serv.http_serv.serve_forever()
-		# 	except KeyboardInterrupt:
-		# 		pass
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
 
-		# threading.Thread(target=create_right_serv).start()
+		url 	= "http://127.0.0.1:60000"
+		resp 	= requests.get(url)
 
-		# TESTING
-		# url 	= "http://127.0.0.1:65500"
-		# resp 	= requests.get(url)
+		self.assertEqual((int)(resp.status_code), 200)
 
-		# self.assertEqual((int)(resp.status_code), 200)
+		self.kill_subprocess()
+
+		# pass
 
 	# do a GET on the server, endpoint not found
 	def test_get_not_found(self):
-		# CAN'T TEST WITHOUT A ACTIVE SERVER, WAIT FOR THREAD OR MOCK
-		# url 	= "http://127.0.0.1:65500/room"
-		# resp 	= requests.get(url)
 
-		# self.assertEqual((int)(resp.status_code), 404)
+		command = 'python3.9 http_server.py'
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		url 	= "http://127.0.0.1:60000/room"
+		resp 	= requests.get(url)
+
+		self.assertEqual(resp.status_code, 404)
+
+		self.kill_subprocess()
+
+		# pass
 
 	# --------------------- #
 	# TEST DO_POST FUNCTION #
 	# --------------------- #
 
-		# do a POST on the server, everything's fine
-	def test_post():
-		# CAN'T TEST WITHOUT A ACTIVE SERVER, WAIT FOR THREAD OR MOCK
-		# url 	= "http://127.0.0.1:65500"
-		# payload = "test"
-		# headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+	# do a POST on the server, everything's fine
+	def test_post(self):
+		
+		command = 'python3.9 http_server.py'
+		args = shlex.split(command)
 
-		# resp 	= requests.post(url, data=payload, headers=headers)
+		p = subprocess.Popen(args) # lauch command as a subprocess
 
-		# self.assertEqual((int)(resp.status_code), 200)
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		url 	= "http://127.0.0.1:60000"
+		payload = "test"
+		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+
+		resp 	= requests.post(url, data=payload, headers=headers)
+
+		self.assertEqual((int)(resp.status_code), 200)
+
+		self.kill_subprocess()
+		# pass
 
 	# do a POST on the server, endpoint not found
-	def test_post_not_found():
-		# CAN'T TEST WITHOUT A ACTIVE SERVER, WAIT FOR THREAD OR MOCK
-		# url 	= "http://127.0.0.1:65500/room"
-		# payload = "test"
-		# headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+	def test_post_not_found(self):
 
-		# resp 	= requests.post(url, data=payload, headers=headers)
+		command = 'python3.9 http_server.py'
+		args = shlex.split(command)
 
-		# self.assertEqual((int)(resp.status_code), 404)
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+		
+		url 	= "http://127.0.0.1:60000/room"
+		payload = "test"
+		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+
+		resp 	= requests.post(url, data=payload, headers=headers)
+
+		self.assertEqual((int)(resp.status_code), 404)
+
+		self.kill_subprocess()
+		# pass
+
+	def kill_subprocess(self):
+		while len(self.list_subprocess) != 0 :
+			p = self.list_subprocess.pop()
+			p.terminate()
+			p.wait()
 
 if __name__ == '__main__':
 
