@@ -8,6 +8,7 @@ from POC5 import connect_user
 from POC5 import exit
 #ROOM RELATED
 from POC5 import print_public_room
+from POC5 import print_private_room
 
 
 
@@ -51,5 +52,10 @@ class TestQuickToolsMethods(unittest.TestCase):
         # si l'utilisateur a tapé "exit" suivi d'un autre mot alors la fonction doit renvoyer False
         self.assertFalse(print_public_room("public room"))
 
-
-        
+    def test_print_private_room(self):
+        # si l'utilisateur a tapé "private" alors la fonction doit renvoyer True
+        self.assertTrue(print_private_room("private"))
+        # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
+        self.assertFalse(print_private_room("privat"))
+        # si l'utilisateur a tapé "private" suivi d'un autre mot alors la fonction doit renvoyer False
+        self.assertFalse(print_private_room("private room"))

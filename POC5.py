@@ -15,3 +15,6 @@ def exit(motcle):
 
 def print_public_room(motcle):
     return True
+
+def print_private_room(motcle):
+    return True
