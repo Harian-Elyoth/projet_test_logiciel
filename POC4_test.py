@@ -8,7 +8,7 @@ import unittest,os,sys,sqlite3
 
 
 # CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, adminStatus BOOLEAN);
-mysql = MySQL('my.db')
+mysql = MySQL('chatsystem.db')
 
 class TestDB(unittest.TestCase):
 	def test_A_user_select(self):
