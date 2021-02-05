@@ -16,10 +16,15 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
+
+			return 0
+
 		else:
 			self.send_response(404)
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
+
+			return -1
 
 		# pass
 
@@ -32,10 +37,16 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
+
+			return 0
+
 		else:
 			self.send_response(404)
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
+
+			return -1
+
 		# pass
 
 class http_server(object):
