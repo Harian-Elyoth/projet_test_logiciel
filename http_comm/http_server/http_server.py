@@ -32,8 +32,8 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	"""handle POST request"""
 	def do_POST(self):
-		content_length = int(self.headers['Content-Length'])
-		body = self.rfile.read(content_length)
+
+		# print("do_POST : path = " + self.path)
 
 		if self.path == '/':
 			self.send_response(200)
@@ -53,13 +53,14 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			content_length = int(self.headers['Content-Length'])
 			username = self.rfile.read(content_length)
 
-			if(username == "admin"):
+			if(username == b'admin'):
 				body = 	b'username : OK'
 			else:
 				body = 	b'username : KO'
 
 			response = BytesIO()
 			response.write(body)
+			
 			self.wfile.write(response.getvalue())
 
 		elif self.path == '/password':
@@ -71,13 +72,14 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			content_length = int(self.headers['Content-Length'])
 			password = self.rfile.read(content_length)
 
-			if(password == "admin123"):
+			if(password == b'admin123'):
 				body = 	b'password : OK'
 			else:
 				body = 	b'password : KO'
 
 			response = BytesIO()
 			response.write(body)
+
 			self.wfile.write(response.getvalue())
 
 		else:
