@@ -72,7 +72,31 @@ class test_integration(unittest.TestCase):
 
 	# everything's fine
 	def test_post_request(self):
-		pass
+
+	# everything's fine
+	def test_post_request(self):
+		# init the test server
+		command = 'python3.8 script_test.py'
+
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		# test the client class
+		good_client_class = http_client("127.0.0.1", 65500, "127.0.0.1", 60000, 1)
+		good_header = {"Content-type": "text/plain"}
+
+		self.assertEqual(good_client_class.request('POST', '/', good_header, 'Hello Server !'), (0, b''))
+
+		# kill the test server
+		command = 'kill -9 $(lsof -t -i tcp:60000)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
+		self.kill_subprocess()
 
 	# everything's fine
 	def test_post_not_found(self):
