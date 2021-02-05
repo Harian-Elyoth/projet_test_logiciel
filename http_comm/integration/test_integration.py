@@ -43,10 +43,31 @@ class test_integration(unittest.TestCase):
 
 	# do a GET on the server, endpoint not found
 	def test_get_not_found(self):
-		pass
+		# init the test server
+		command = 'python3.8 script_test.py'
+
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		# test the client class
+		good_client_class = http_client("127.0.0.1", 65500, "127.0.0.1", 60000, 1)
+		good_header = {"Content-type": "text/plain"}
+
+		self.assertEqual(good_client_class.request('GET', '/room', good_header, ''), (-8, 'test : KO'))
+
+		# kill the test server
+		command = 'kill -9 $(lsof -t -i tcp:60000)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
+		self.kill_subprocess()
 
 	# ---------------------------- #
-	# INTEGRATION TEST GET REQUEST #
+	# INTEGRATION TEST POST REQUEST #
 	# ---------------------------- #
 
 	# everything's fine
