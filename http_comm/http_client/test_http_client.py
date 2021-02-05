@@ -109,7 +109,7 @@ class test_http_client(unittest.TestCase):
 				mock_getresponse.return_value.status = 404
 				mock_getresponse.return_value.read.return_value = "test : KO"
 
-				self.assertEqual(bad_client_class.request('GET', '/', good_header, ''), (-8, "test : KO"))
+				self.assertEqual(bad_client_class.request('GET', '/room', good_header, ''), (-8, "test : KO"))
 
 	# method is a string
 	def test_method_type(self):
@@ -166,7 +166,7 @@ class test_http_client(unittest.TestCase):
 
 		# test the client class
 		good_client_class = http_client("127.0.0.1", 65500, "127.0.0.1", 65501, 1)
-		self.assertEqual(good_client_class.request('GET', '/', {}, ''), (0, b'test : KO'))
+		self.assertEqual(good_client_class.request('GET', '/', {}, ''), (0, b'test : OK'))
 
 		# kill the test server
 		command = 'kill -9 $(lsof -t -i tcp:65501)'
@@ -192,6 +192,31 @@ class test_http_client(unittest.TestCase):
 		good_header = {"Content-type": "text/plain"}
 
 		self.assertEqual(good_client_class.request('POST', '/', good_header, 'Hello Server !'), (0, b'Hello Server !'))
+
+		# kill the test server
+		command = 'kill -9 $(lsof -t -i tcp:65501)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
+		self.kill_subprocess()
+
+	# everything's fine
+	def test_functional_server_unreachable(self):
+		# init the test server
+		command = 'python3.8 script_test.py'
+
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		# test the client class
+		good_client_class = http_client("127.0.0.1", 65500, "127.0.0.1", 65501, 1)
+		good_header = {"Content-type": "text/plain"}
+
+		self.assertEqual(good_client_class.request('POST', '/room', good_header, 'Hello Server !'), (-8, "test : KO"))
 
 		# kill the test server
 		command = 'kill -9 $(lsof -t -i tcp:65501)'
