@@ -3,11 +3,14 @@
 import unittest
 from http_client import http_client
 from mock import patch
+import os
+import subprocess
+import shlex
+import time
 
 class test_http_client(unittest.TestCase):
-	# called at start
-	def setUp(self):
-		pass
+
+	list_subprocess = []
 
 	# --------------------- #
 	# TEST __NEW__ FUNCTION #
@@ -77,8 +80,8 @@ class test_http_client(unittest.TestCase):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		with patch('http_client.http.client.HTTPSConnection.request') as mock_request:
-			with patch('http_client.http.client.HTTPSConnection.getresponse') as mock_getresponse:
+		with patch('http_client.http.client.HTTPConnection.request') as mock_request:
+			with patch('http_client.http.client.HTTPConnection.getresponse') as mock_getresponse:
 				mock_getresponse.return_value.status = 200
 				mock_getresponse.return_value.read.return_value = "test : OK"
 
@@ -89,8 +92,8 @@ class test_http_client(unittest.TestCase):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		with patch('http_client.http.client.HTTPSConnection.request') as mock_request:
-			with patch('http_client.http.client.HTTPSConnection.getresponse') as mock_getresponse:
+		with patch('http_client.http.client.HTTPConnection.request') as mock_request:
+			with patch('http_client.http.client.HTTPConnection.getresponse') as mock_getresponse:
 				mock_getresponse.return_value.status = 200
 				mock_getresponse.return_value.read.return_value = "test : OK"
 
@@ -101,8 +104,8 @@ class test_http_client(unittest.TestCase):
 		bad_client_class = http_client("127.0.0.1", 65500, "192.168.47.0", 65501, 1)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-		with patch('http_client.http.client.HTTPSConnection.request') as mock_request:
-			with patch('http_client.http.client.HTTPSConnection.getresponse') as mock_getresponse:
+		with patch('http_client.http.client.HTTPConnection.request') as mock_request:
+			with patch('http_client.http.client.HTTPConnection.getresponse') as mock_getresponse:
 				mock_getresponse.return_value.status = 404
 				mock_getresponse.return_value.read.return_value = "test : KO"
 
@@ -139,7 +142,6 @@ class test_http_client(unittest.TestCase):
 	# body is a string
 	def test_body_type(self):
 		good_client_class = http_client("127.0.0.1", 65500, "192.168.47.1", 65501, 10)
-		print(good_client_class)
 		good_header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
 		self.assertEqual(good_client_class.request('GET', '/', good_header, 0), (-6, ""))
@@ -150,11 +152,34 @@ class test_http_client(unittest.TestCase):
 
 		self.assertEqual(good_client_class.request('GET', '/', 0, ''), (-7, ""))
 
-	###################
+	# everything's fine
+	def test_functional_request_get(self):
+		# init the test server
+		command = 'python3.8 script_test.py'
 
-	# called at end
-	def tearDown(self):
-		pass
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		# test the client class
+		good_client_class = http_client("127.0.0.1", 65500, "127.0.0.1", 65501, 1)
+		self.assertEqual(good_client_class.request('GET', '/', {}, ''), (0, b'test : KO'))
+
+		# kill the test server
+		command = 'kill -9 $(lsof -t -i tcp:65501)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
+		self.kill_subprocess()
+
+	def kill_subprocess(self):
+		while len(self.list_subprocess) != 0 :
+			p = self.list_subprocess.pop()
+			p.terminate()
+			p.wait()
 
 
 if __name__ == '__main__':
