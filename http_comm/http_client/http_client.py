@@ -2,7 +2,7 @@
 
 import http.client
 import urllib
-import socket
+from socket import *
 
 class http_client(object):
 
@@ -12,7 +12,7 @@ class http_client(object):
 	def __new__(self, ip, port, ip_server, port_server, timeout):
 
 		# TESTS on parameters
-
+		
 		# test ip_server type
 		if type(ip_server) != str:
 			return -1
@@ -88,7 +88,7 @@ class http_client(object):
 		self.port_server 	= port_server
 		self.timeout		= timeout
 
-		self.http_conn 		= http.client.HTTPSConnection(self.ip_server, self.port_server, timeout=self.timeout)
+		self.http_conn 		= http.client.HTTPConnection(self.ip_server, self.port_server, timeout=self.timeout)
 
 	"""make http requests (GET, POST)"""
 	def request(self, method, endpoint, header, body):
@@ -129,7 +129,6 @@ class http_client(object):
 				return (-8, "test : KO")
 
 		except socket.timeout:
-			print('caught a timeout')
 			return (-9, "test : KO")
 
 	# called when there not references anymore
