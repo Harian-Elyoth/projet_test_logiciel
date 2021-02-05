@@ -1,14 +1,9 @@
 from http_client import http_client
 
-
 client = http_client("127.0.0.1", 65500, "127.0.0.1", 60000, 5)
 header = {"Content-type": "text/plain"}
 
-print("GET /")
 (error, resp) = client.request('GET', '/', header, '')
-
-print("error = " + str(error))
-print("\nresp =  " + str(resp))
 
 if(error == 0):
 	if(resp == b'server : OK'):
@@ -22,9 +17,6 @@ valid_username = False
 while (valid_username == False):
 	body = input("Veuillez entrer votre identifiant:\n")
 	(error, resp) = client.request('POST', '/username', header, body)
-
-	print("\nerror = " + str(error))
-	print("\nresp = " + str(resp))
 
 	if(error == 0):
 		if(resp == b'username : OK'):
@@ -41,7 +33,7 @@ while valid_password == False:
 
 	if(error == 0):
 		if(resp == b'password : OK'):
-			valid_username = True
+			valid_password = True
 		else:
 			print("Votre mots de passe est incorrect.\n")
 	else:
