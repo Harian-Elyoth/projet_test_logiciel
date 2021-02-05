@@ -1,12 +1,13 @@
 import http.server
+from io import BytesIO
 
 class handler_http_serv(http.server.BaseHTTPRequestHandler):
-	
+
 	"""docstring for handler_http_serv class"""
 
 	def __init__(self, *args, **kwargs):
 		super(handler_http_serv, self).__init__(*args, **kwargs)
-			
+
 	"""handle GET request"""
 	def do_GET(self):
 
@@ -14,40 +15,75 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 		if self.path == '/':
 			self.send_response(200)
+
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			return 0
+			body = 	b'server : OK'
+			self.wfile.write(body)
 
 		else:
 			self.send_response(404)
+
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			return -1
-
-		# pass
+			self.wfile.write(b'error : end point')
 
 	"""handle POST request"""
 	def do_POST(self):
+		content_length = int(self.headers['Content-Length'])
+		body = self.rfile.read(content_length)
 
-		# print("do_POST : path = " + self.path)
+		response = BytesIO()
 
 		if self.path == '/':
 			self.send_response(200)
+
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			return 0
+			body = 	b'server : OK'
+			self.wfile.write(body)
+
+		elif self.path == '/username':
+			self.send_response(200)
+
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+
+			content_length = int(self.headers['Content-Length'])
+			username = self.rfile.read(content_length)
+
+			if(username == "admin"):
+				body = 	b'username : OK'
+			else:
+				body = 	b'username : KO'
+
+			response.write(body)
+			self.wfile.write(response.getvalue())
+
+		elif self.path == '/password':
+			self.send_response(200)
+
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+
+			content_length = int(self.headers['Content-Length'])
+			password = self.rfile.read(content_length)
+
+			if(password == "admin123"):
+				body = 	b'password : OK'
+			else:
+				body = 	b'password : KO'
+
+			response.write(body)
+			self.wfile.write(response.getvalue())
 
 		else:
 			self.send_response(404)
-			self.send_header("Content-type", "text/plain")
 			self.end_headers()
-
-			return -1
-
-		# pass
+			self.wfile.write(b'error : end point')
 
 class http_server(object):
 
@@ -69,7 +105,7 @@ class http_server(object):
 		if len(ip_bytes) == 4:
 			for ip_byte in ip_bytes:
 				int_ip_byte = int(ip_byte)
-				
+
 				if int_ip_byte < 0 or int_ip_byte > 255:
 					return -2
 		else:
@@ -90,7 +126,7 @@ class http_server(object):
 
 	"""called for initialize object (after new), return None"""
 	def __init__(self, ip, port):
-		
+
 		self.ip 		= ip
 		self.port 		= port
 
@@ -104,8 +140,8 @@ class http_server(object):
 			self.http_serv.serve_forever()
 		except KeyboardInterrupt:
 			print("Exception in serve_forever()")
-		
-		
+
+
 	"""called when there not references anymore to close the server"""
 	def __del__(self):
 		self.http_serv.server_close()
