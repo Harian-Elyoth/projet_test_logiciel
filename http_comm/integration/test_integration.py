@@ -19,7 +19,7 @@ class test_integration(unittest.TestCase):
 
 	def test_get_request(self):
 		# init the test server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 
 		args = shlex.split(command)
 
@@ -44,7 +44,7 @@ class test_integration(unittest.TestCase):
 	# do a GET on the server, endpoint not found
 	def test_get_not_found(self):
 		# init the test server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 
 		args = shlex.split(command)
 
@@ -66,14 +66,14 @@ class test_integration(unittest.TestCase):
 
 		self.kill_subprocess()
 
-	# ---------------------------- #
+	# ----------------------------- #
 	# INTEGRATION TEST POST REQUEST #
-	# ---------------------------- #
+	# ----------------------------- #
 
 	# everything's fine
 	def test_post_request(self):
 		# init the test server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 
 		args = shlex.split(command)
 
@@ -98,7 +98,7 @@ class test_integration(unittest.TestCase):
 	# do a POST on the server, endpoint not found
 	def test_post_not_found(self):
 		# init the test server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 
 		args = shlex.split(command)
 
