@@ -2,6 +2,7 @@ import shutil
 import shlex
 import unittest
 import subprocess
+import os
 import time
 import requests
 from mock import patch
@@ -79,7 +80,8 @@ class test_http_server(unittest.TestCase):
 
 	# do a GET on the server, everything's fine
 	def test_functionnal_get(self):
-		command = 'python3.9 http_server.py'
+		# init server
+		command = 'python3.8 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
@@ -92,14 +94,17 @@ class test_http_server(unittest.TestCase):
 
 		self.assertEqual((int)(resp.status_code), 200)
 
-		self.kill_subprocess()
+		# kill server
+		command = 'kill -9 $(lsof -t -i tcp:60000)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
 
-		# pass
+		self.kill_subprocess()
 
 	# do a GET on the server, endpoint not found
 	def test_functionnal_get_not_found(self):
-
-		command = 'python3.9 http_server.py'
+		# init server
+		command = 'python3.8 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
@@ -112,9 +117,12 @@ class test_http_server(unittest.TestCase):
 
 		self.assertEqual(resp.status_code, 404)
 
-		self.kill_subprocess()
+		# kill server
+		command = 'kill -9 $(lsof -t -i tcp:60000)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
 
-		# pass
+		self.kill_subprocess()
 
 	# --------------------------------- #
 	# TEST FUNCTIONNAL DO_POST FUNCTION #
@@ -122,8 +130,8 @@ class test_http_server(unittest.TestCase):
 
 	# do a POST on the server, everything's fine
 	def test_functionnal_post(self):
-		
-		command = 'python3.9 http_server.py'
+		# init server
+		command = 'python3.8 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
@@ -139,20 +147,24 @@ class test_http_server(unittest.TestCase):
 
 		self.assertEqual((int)(resp.status_code), 200)
 
+		# kill server
+		command = 'kill -9 $(lsof -t -i tcp:60000)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
 		self.kill_subprocess()
-		# pass
 
 	# do a POST on the server, endpoint not found
 	def test_functionnal_post_not_found(self):
-
-		command = 'python3.9 http_server.py'
+		# init server
+		command = 'python3.8 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
 
 		self.list_subprocess.append(p)
 		time.sleep(1) # wait for the server to be properly init
-		
+
 		url 	= "http://127.0.0.1:60000/room"
 		payload = "test"
 		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
@@ -161,8 +173,12 @@ class test_http_server(unittest.TestCase):
 
 		self.assertEqual((int)(resp.status_code), 404)
 
+		# kill server
+		command = 'kill -9 $(lsof -t -i tcp:60000)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
 		self.kill_subprocess()
-		# pass
 
 	# --------------------------------- #
 
