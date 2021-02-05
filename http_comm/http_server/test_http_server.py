@@ -43,37 +43,6 @@ class test_http_server(unittest.TestCase):
 		self.assertEqual(http_server("127.0.0.1",    15), -5)
 		self.assertEqual(http_server("127.0.0.1", 48800), -5)
 
-	# -------------------- #
-	# TEST DO_GET FUNCTION #
-	# -------------------- #
-
-	# do a GET on the server, everything's fine
-	def test_get(self):
-
-		# with patch('http_server.handler_http_serv.do_GET') as mock_handler_get:
-		# 	mock_handler_get.return_value = 0
-
-		# 	url 	= "http://127.0.0.1:60000"
-		# 	resp 	= requests.get(url)
-		pass
-
-	# do a GET on the server, endpoint not found
-	def test_get_not_found(self):
-		pass
-
-	# --------------------- #
-	# TEST DO_POST FUNCTION #
-	# --------------------- #
-
-	# do a POST on the server, everything's fine
-	def test_post(self):
-		pass
-
-	# do a POST on the server, endpoint not found
-	def test_post_not_found(self):
-		pass
-
-
 	# -------------------------------- #
 	# TEST FUNCTIONNAL DO_GET FUNCTION #
 	# -------------------------------- #
@@ -81,7 +50,7 @@ class test_http_server(unittest.TestCase):
 	# do a GET on the server, everything's fine
 	def test_functionnal_get(self):
 		# init server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
@@ -104,7 +73,7 @@ class test_http_server(unittest.TestCase):
 	# do a GET on the server, endpoint not found
 	def test_functionnal_get_not_found(self):
 		# init server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
@@ -131,7 +100,7 @@ class test_http_server(unittest.TestCase):
 	# do a POST on the server, everything's fine
 	def test_functionnal_post(self):
 		# init server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
@@ -157,7 +126,7 @@ class test_http_server(unittest.TestCase):
 	# do a POST on the server, endpoint not found
 	def test_functionnal_post_not_found(self):
 		# init server
-		command = 'python3.8 script_test.py'
+		command = 'python3 script_test.py'
 		args = shlex.split(command)
 
 		p = subprocess.Popen(args) # lauch command as a subprocess
