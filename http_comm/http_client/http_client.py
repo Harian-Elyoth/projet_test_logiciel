@@ -128,7 +128,7 @@ class http_client(object):
 			else:
 				return (-8, "test : KO")
 
-		except socket.timeout:
+		except timeout:
 			return (-9, "test : KO")
 
 	# called when there not references anymore
