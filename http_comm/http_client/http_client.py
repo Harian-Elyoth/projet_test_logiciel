@@ -12,7 +12,7 @@ class http_client(object):
 	def __new__(self, ip, port, ip_server, port_server, timeout):
 
 		# TESTS on parameters
-		
+
 		# test ip_server type
 		if type(ip_server) != str:
 			return -1
