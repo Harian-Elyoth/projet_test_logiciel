@@ -175,6 +175,32 @@ class test_http_client(unittest.TestCase):
 
 		self.kill_subprocess()
 
+	# everything's fine
+	def test_functional_request_post(self):
+		# init the test server
+		command = 'python3.8 script_test.py'
+
+		args = shlex.split(command)
+
+		p = subprocess.Popen(args) # lauch command as a subprocess
+
+		self.list_subprocess.append(p)
+		time.sleep(1) # wait for the server to be properly init
+
+		# test the client class
+		good_client_class = http_client("127.0.0.1", 65500, "127.0.0.1", 65501, 1)
+		good_header = {"Content-type": "text/plain"}
+
+		self.assertEqual(good_client_class.request('POST', '/', good_header, 'Hello Server !'), (0, b'Hello Server !'))
+
+		# kill the test server
+		command = 'kill -9 $(lsof -t -i tcp:65501)'
+		os.system(command)
+		time.sleep(1) # wait for the server to be properly exit
+
+		self.kill_subprocess()
+	###################
+
 	def kill_subprocess(self):
 		while len(self.list_subprocess) != 0 :
 			p = self.list_subprocess.pop()
