@@ -35,8 +35,6 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 		content_length = int(self.headers['Content-Length'])
 		body = self.rfile.read(content_length)
 
-		response = BytesIO()
-
 		if self.path == '/':
 			self.send_response(200)
 
@@ -60,6 +58,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			else:
 				body = 	b'username : KO'
 
+			response = BytesIO()
 			response.write(body)
 			self.wfile.write(response.getvalue())
 
@@ -77,6 +76,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			else:
 				body = 	b'password : KO'
 
+			response = BytesIO()
 			response.write(body)
 			self.wfile.write(response.getvalue())
 
