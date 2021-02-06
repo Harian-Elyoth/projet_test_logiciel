@@ -1,3 +1,7 @@
+#/***********************************************
+#     Authors : Aziz IDOMAR, Enzo CALVINO
+#************************************************/
+
 # test class for integration
 
 import os, time

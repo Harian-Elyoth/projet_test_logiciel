@@ -1,3 +1,7 @@
+#/***********************************************
+#     Authors : Aziz IDOMAR, Enzo CALVINO
+#************************************************/
+
 # class for test handler
 
 from http.server import HTTPServer, BaseHTTPRequestHandler

@@ -1,5 +1,8 @@
-import urllib.parse, sqlite3
+#/***********************************************
+#     Authors : Yingshan LIU, Mingda WANG
+#************************************************/
 
+import urllib.parse, sqlite3
 
 class sql():
 	def __init__(self, name):

@@ -1,3 +1,7 @@
+#/***********************************************
+#     Authors : Aziz IDOMAR, Enzo CALVINO
+#************************************************/
+
 import shutil
 import shlex
 import unittest

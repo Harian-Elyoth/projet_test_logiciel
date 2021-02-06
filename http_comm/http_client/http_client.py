@@ -1,3 +1,7 @@
+#/***********************************************
+#     Authors : Aziz IDOMAR, Enzo CALVINO
+#************************************************/
+
 # class for http client
 
 import http.client
