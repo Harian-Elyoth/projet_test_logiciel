@@ -1,3 +1,4 @@
+from sql import sql
 import http.server
 from io import BytesIO
 
@@ -5,7 +6,8 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	"""docstring for handler_http_serv class"""
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, *args, **kwargs):		
+		self.mysql = sql('chatsystem.db')
 		super(handler_http_serv, self).__init__(*args, **kwargs)
 
 	"""handle GET request"""
@@ -53,7 +55,11 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			content_length = int(self.headers['Content-Length'])
 			username = self.rfile.read(content_length)
 
-			if(username == b'admin'):
+			username_str = username.decode("utf-8")
+
+			resp = self.mysql.select(("/User/username/username/" + username_str))
+
+			if(len(resp) > 0):
 				body = 	b'username : OK'
 			else:
 				body = 	b'username : KO'
@@ -72,7 +78,11 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			content_length = int(self.headers['Content-Length'])
 			password = self.rfile.read(content_length)
 
-			if(password == b'admin123'):
+			password_str = password.decode("utf-8")
+
+			resp = self.mysql.select(("/User/password/password/" + password_str))
+
+			if(len(resp) > 0):
 				body = 	b'password : OK'
 			else:
 				body = 	b'password : KO'
