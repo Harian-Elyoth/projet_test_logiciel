@@ -14,3 +14,6 @@ ln -fs ../database/sql.py
 # database
 ln -fs ../database/chatsystem.sql
 
+# create .db file
+sqlite3 chatsystem.db -cmd ".read chatsystem.sql" ".quit"
+
