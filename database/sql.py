@@ -17,12 +17,15 @@ class sql():
 	def select(self,path):
 		elem = path.split('/')
 		if len(elem) == 2:
-			req = "select * from %s" %(elem[1])
+			self.req = "select * from %s" %(elem[1])
 		elif len(elem) == 3:
-			req = "select %s from %s" %(elem[2],elem[1])
+			self.req = "select %s from %s" %(elem[2],elem[1])
 		elif len(elem) == 5:
-			req = "select %s from %s where %s=%s" %(elem[2],elem[1],elem[3],elem[4])
-		return self.c.execute(req).fetchall()
+			self.req = "select %s from %s where %s='%s'" %(elem[2],elem[1],elem[3],elem[4])
+
+		# print(self.req)
+
+		return self.c.execute(self.req).fetchall()
 	
 	def insert(self,path,query):
 		# print("query")
