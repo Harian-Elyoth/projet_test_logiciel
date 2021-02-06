@@ -21,6 +21,9 @@ CREATE TABLE Room_User_Table (idRoom INTEGER, idUser INTEGER);
 CREATE TABLE Message (sendingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, idRoom INTEGER, idUser INTEGER, content TEXT);
 
 -- Insertion de données
+INSERT INTO User (firstName, lastName, username, password) VALUES ("Admin","Admin","admin","test_admin");
+INSERT INTO User (firstName, lastName, username, password) VALUES ("Enzo","Calvino","enzo_log","test_enzo");
+INSERT INTO User (firstName, lastName, username, password) VALUES ("Aziz","Idomar","aziz_log","test_aziz");
 INSERT INTO User (firstName, lastName, username, password) VALUES ("John","Doe","Dr.JD","0000AAAA");
 INSERT INTO User (firstName, lastName, username, password) VALUES ("Jane","Doe","MsJD","1234AzEr");
 INSERT INTO User (firstName, lastName, username, password) VALUES ("Philippe","Durand","Durandil","Df1598Rl");
