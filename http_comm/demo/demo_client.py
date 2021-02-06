@@ -1,3 +1,7 @@
+#/***********************************************
+#     Authors : Aziz IDOMAR, Enzo CALVINO
+#************************************************/
+
 from http_client import http_client
 
 client = http_client("127.0.0.1", 65500, "127.0.0.1", 60000, 5)
