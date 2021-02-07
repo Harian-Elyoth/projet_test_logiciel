@@ -144,4 +144,5 @@ class socket_comm(object):
 		self.send_sem.release()
 
 	def __del__(self):
-		pass
+		self.socket_recv.close()
+		self.socket_send.close()
