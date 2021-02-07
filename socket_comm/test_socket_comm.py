@@ -58,50 +58,56 @@ class test_socket_comm(unittest.TestCase):
 	# everything's fine
 	def test_connect(self):
 		with patch('socket_comm.threading.Thread') as mock_thread_connect:
-			good_socket_comm = socket_comm("127.0.0.1", 65500)
-			good_ip   = "127.0.0.1"
-			good_port = 65501
-			self.assertEqual(good_socket_comm.connect(good_ip, good_port), 0)
+			with patch('socket_comm.socket') as mock_socket:
+				good_socket_comm = socket_comm("127.0.0.1", 65500)
+				good_ip   = "127.0.0.1"
+				good_port = 65501
+				self.assertEqual(good_socket_comm.connect(good_ip, good_port), 0)
 
 	# ip is a string
 	def test_connect_ip_type(self):
 		with patch('socket_comm.threading.Thread') as mock_thread_connect:
-			good_socket_comm = socket_comm("127.0.0.1", 65500)
-			bad_ip   = 192.168
-			good_port = 65501
-			self.assertEqual(good_socket_comm.connect(bad_ip, good_port), -1)
+			with patch('socket_comm.socket') as mock_socket:
+				good_socket_comm = socket_comm("127.0.0.1", 65500)
+				bad_ip   = 192.168
+				good_port = 65501
+				self.assertEqual(good_socket_comm.connect(bad_ip, good_port), -1)
 
 	# ip is something like 192.168.41.2
 	def test_connect_ip_format(self):
 		with patch('socket_comm.threading.Thread') as mock_thread_connect:
-			good_socket_comm = socket_comm("127.0.0.1", 65500)
-			bad_ip   = "1923.17.435.6524"
-			good_port = 65501
-			self.assertEqual(good_socket_comm.connect(bad_ip, good_port), -2)
+			with patch('socket_comm.socket') as mock_socket:
+				good_socket_comm = socket_comm("127.0.0.1", 65500)
+				bad_ip   = "1923.17.435.6524"
+				good_port = 65501
+				self.assertEqual(good_socket_comm.connect(bad_ip, good_port), -2)
 
 	# port is an integer
 	def test_connect_port_type(self):
 		with patch('socket_comm.threading.Thread') as mock_thread_connect:
-			good_socket_comm = socket_comm("127.0.0.1", 65500)
-			good_ip  = "127.0.0.1"
-			bad_port = "65501"
-			self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -3)
+			with patch('socket_comm.socket') as mock_socket:
+				good_socket_comm = socket_comm("127.0.0.1", 65500)
+				good_ip  = "127.0.0.1"
+				bad_port = "65501"
+				self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -3)
 
 	# port is between 0 and 65535
 	def test_connect_port_format(self):
 		with patch('socket_comm.threading.Thread') as mock_thread_connect:
-			good_socket_comm = socket_comm("127.0.0.1", 65500)
-			good_ip   = "127.0.0.1"
-			bad_port = -65501
-			self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -4)
+			with patch('socket_comm.socket') as mock_socket:
+				good_socket_comm = socket_comm("127.0.0.1", 65500)
+				good_ip   = "127.0.0.1"
+				bad_port = -65501
+				self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -4)
 
 	# port is available : 49152 - 65535
 	def test_connect_port_allow(self):
 		with patch('socket_comm.threading.Thread') as mock_thread_connect:
-			good_socket_comm = socket_comm("127.0.0.1", 65500)
-			good_ip   = "127.0.0.1"
-			bad_port = 15
-			self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -5)
+			with patch('socket_comm.socket') as mock_socket:
+				good_socket_comm = socket_comm("127.0.0.1", 65500)
+				good_ip   = "127.0.0.1"
+				bad_port = 15
+				self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -5)
 
 if __name__ == '__main__':
 	unittest.main()
