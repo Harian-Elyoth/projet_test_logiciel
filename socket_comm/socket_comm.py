@@ -71,7 +71,18 @@ class socket_comm(object):
 		pass
 
 	def listen(self, backlog_size):
-		pass
+		# test backlog_size type
+		if type(backlog_size) != int:
+			return -1
+
+		try:
+			self.socket_recv.bind((self.ip, self.port))
+			self.socket_recv.listen(backlog_size)
+		except socket.error:
+			return -2
+
+		threading.Thread(target=self.__thread_listen).start()
+		return 0
 
 	def connect(self, ip, port):
 		pass
