@@ -12,7 +12,7 @@ class socket_comm(object):
 		ip_bytes = ip.split(".")
 
 		if len(ip_bytes) == 4:
-			for ip_bytes in ip_bytes:
+			for ip_byte in ip_bytes:
 				int_ip_byte = int(ip_byte)
 
 				if int_ip_byte < 0 or int_ip_byte > 255:
@@ -111,7 +111,7 @@ class socket_comm(object):
 		ip_bytes = ip.split(".")
 
 		if len(ip_bytes) == 4:
-			for ip_bytes in ip_bytes:
+			for ip_byte in ip_bytes:
 				int_ip_byte = int(ip_byte)
 
 				if int_ip_byte < 0 or int_ip_byte > 255:
