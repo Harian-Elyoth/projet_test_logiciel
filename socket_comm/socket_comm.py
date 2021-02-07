@@ -1,16 +1,45 @@
-import socket, threading
+import socket, time, os, threading
 
 class socket_comm(object):
 	def __new__(self, ip, port):
+
+		# test ip type
+		if type(ip) != str:
+			return -1
+
+		# test ip format
+		ip_bytes = []
+		ip_bytes = ip.split(".")
+
+		if len(ip_bytes) == 4:
+			for ip_bytes in ip_bytes:
+				int_ip_byte = int(ip_byte)
+
+				if int_ip_byte < 0 or int_ip_byte > 255:
+					return -2
+		else:
+			return -2
+
+		# test port type
+		if type(port) != int:
+			return -3
+
+		# test port format
+		if port > 0 and port < 65535:
+			if port < 49152:
+				return -5
+		else:
+			return -4
+
 		return super(socket_comm, self).__new__(self)
 
 	def __init__(self, ip, port):
 		pass
 
-	def __thread_listen(self, backlog_size):
+	def __thread_listen(self):
 		pass
 
-	def __thread_connect(self, ip, port):
+	def __thread_connect(self):
 		pass
 
 	def listen(self, backlog_size):
