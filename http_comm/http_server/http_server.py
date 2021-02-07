@@ -24,6 +24,15 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			body = 	b'server : OK'
 			self.wfile.write(body)
 
+		elif self.path == '/room':
+			self.send_response(200)
+
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+
+			body = 	b'room : OK'
+			self.wfile.write(body)
+
 		else:
 			self.send_response(404)
 
