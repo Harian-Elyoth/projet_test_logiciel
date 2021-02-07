@@ -34,7 +34,21 @@ class socket_comm(object):
 		return super(socket_comm, self).__new__(self)
 
 	def __init__(self, ip, port):
-		pass
+		self.ip   = ip
+		self.port = port
+
+		self.socket_recv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.socket_send = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+		self.socket_recv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.socket_send.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+		self.receive_msg = ''
+
+		self.send_msg = ''
+		self.send_sem = threading.Lock()
+
+		self.stop_threads = False
 
 	def __thread_listen(self):
 		pass
