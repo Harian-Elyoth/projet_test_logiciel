@@ -1,8 +1,12 @@
 import unittest
-from socket_comm import socket_comm
 from mock import patch
+from socket_comm import socket_comm
+import os, subprocess, shlex
+import time
 
 class test_socket_comm(unittest.TestCase):
+
+	list_subprocess = []
 
 	# --------------------- #
 	# TEST __NEW__ FUNCTION #
@@ -108,6 +112,35 @@ class test_socket_comm(unittest.TestCase):
 				good_ip   = "127.0.0.1"
 				bad_port = 15
 				self.assertEqual(good_socket_comm.connect(good_ip, bad_port), -5)
+
+	# ---------------- #
+	# FUNCTIONNAL TEST #
+	# ---------------- #
+
+	def test_socket_comm(self):
+		# init the test server
+		command = 'python3.8 script_test_server.py'
+		args = shlex.split(command)
+		p = subprocess.Popen(args)
+		self.list_subprocess.append(p)
+
+		#init the test client
+		command = 'python3.8 script_test_client.py'
+		args = shlex.split(command)
+		p = subprocess.Popen(args)
+		self.list_subprocess.append(p)
+
+		time.sleep(5) # wait for the communication
+
+		self.kill_subprocess()
+
+	###################
+
+	def kill_subprocess(self):
+		while len(self.list_subprocess) != 0 :
+			p = self.list_subprocess.pop()
+			p.terminate()
+			p.wait()
 
 if __name__ == '__main__':
 	unittest.main()
