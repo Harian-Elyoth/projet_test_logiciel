@@ -139,7 +139,9 @@ class socket_comm(object):
 		return 0
 
 	def send_message(self, message):
-		pass
+		self.send_sem.acquire()
+		self.send_msg = message
+		self.send_sem.release()
 
 	def __del__(self):
 		pass
