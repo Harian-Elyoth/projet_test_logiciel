@@ -68,7 +68,23 @@ class socket_comm(object):
 			clientsocket.close()
 
 	def __thread_connect(self):
-		pass
+		clientsocket, address = self.socket_send.accept()
+
+		try:
+			while True:
+				if self.stop_threads == True:
+					raise ValueError
+
+				if len(self.send_msg) != 0 :
+					self.send_sem.acquire()
+
+					self.socket_send.sendall(bytes(self.send_msg,"utf-8"))
+					self.send_msg = ''
+
+					self.send_sem.release()
+
+		except ValueError:
+			pass
 
 	def listen(self, backlog_size):
 		# test backlog_size type
