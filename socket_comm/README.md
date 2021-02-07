@@ -9,12 +9,11 @@ Fonction __new__ de socket_comm :
 		-> -5  : Le port est indisponible
 
 Fonction listen de socket_comm :
-
 		->  0  : Tout s'est bien déroulé
 		-> -1  : Le backlog n'a pas le bon format
+		-> -2  : Le port est indisponible
 
 Fonction connect de socket_comm :
-
 		->  0  : Tout s'est bien déroulé
 		-> -1  : L'adresse IP n'a pas le bon type
 		-> -2  : L'adresse IP n'a pas le bon format
