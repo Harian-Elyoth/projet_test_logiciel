@@ -68,8 +68,6 @@ class socket_comm(object):
 			clientsocket.close()
 
 	def __thread_connect(self):
-		clientsocket, address = self.socket_send.accept()
-
 		try:
 			while True:
 				if self.stop_threads == True:
