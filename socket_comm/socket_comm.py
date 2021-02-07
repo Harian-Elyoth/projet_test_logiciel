@@ -51,7 +51,21 @@ class socket_comm(object):
 		self.stop_threads = False
 
 	def __thread_listen(self):
-		pass
+		clientsocket, address = self.socket_recv.accept()
+
+		try:
+			while True:
+				if self.stop_threads == True:
+					raise ValueError
+
+				message = clientsocket.recv(1028)
+				self.receive_msg = message.decode("utf-8")
+
+				if len(self.receive_msg) != 0 :
+					print("receive_msg = " + self.receive_msg)
+
+		except ValueError:
+			clientsocket.close()
 
 	def __thread_connect(self):
 		pass
