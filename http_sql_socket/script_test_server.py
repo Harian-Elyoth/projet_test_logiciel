@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	server_socket.listen(5)
 	time.sleep(3)
 	server_socket.connect("127.0.0.1", 60002)
-	server_socket.connect("127.0.0.1", 60003)
+	# server_socket.connect("127.0.0.1", 60003)
 
 	print("Lancement du Serveur HTTP...\n")
 	serv_test.run()
