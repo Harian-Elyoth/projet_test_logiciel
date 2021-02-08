@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS Room_User_Table;  -- Table des accès accordées aux utilis
 DROP TABLE IF EXISTS Message;          -- Tables contenant les messages (historique)
 
 -- commandes de création des tables
-CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, adminStatus BOOLEAN);
+CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, username TEXT, password TEXT, adminStatus INTEGER);
 
 CREATE TABLE Room (id INTEGER PRIMARY KEY AUTOINCREMENT, roomName TEXT);
 
@@ -21,15 +21,11 @@ CREATE TABLE Room_User_Table (idRoom INTEGER, idUser INTEGER);
 CREATE TABLE Message (sendingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, idRoom INTEGER, idUser INTEGER, content TEXT);
 
 -- Insertion de données
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Admin","Admin","admin","test_admin");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Enzo","Calvino","enzo_log","test_enzo");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Aziz","Idomar","aziz_log","test_aziz");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("John","Doe","Dr.JD","0000AAAA");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Jane","Doe","MsJD","1234AzEr");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Philippe","Durand","Durandil","Df1598Rl");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Karine","Tour","Kami","659DB8g7");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Theo","Porose","Ostheoporose","147F258F");
-INSERT INTO User (firstName, lastName, username, password) VALUES ("Emma","Misamal","MissEmma","jhLO7649");
+INSERT INTO User (firstName, lastName, username, password, adminStatus) VALUES ("Admin","Admin","admin","test_admin", 1);
+INSERT INTO User (firstName, lastName, username, password, adminStatus) VALUES ("Enzo","Calvino","enzo_log","test_enzo", 0);
+INSERT INTO User (firstName, lastName, username, password, adminStatus) VALUES ("Aziz","Idomar","aziz_log","test_aziz", 0);
+INSERT INTO User (firstName, lastName, username, password, adminStatus) VALUES ("Theo","Paillier","theo_log","test_theo", 0);
+INSERT INTO User (firstName, lastName, username, password, adminStatus) VALUES ("Emmanuel","Collin","emmanuel_log","test_emmanuel", 0);
 
 INSERT INTO Room (roomName) VALUES ("Emergency meeting");
 INSERT INTO Room (roomName) VALUES ("Daily news");
