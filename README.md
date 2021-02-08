@@ -1,5 +1,5 @@
-# Projet_test_logiciel
+# POC4 Interface SQLite.
 
-## Utilisation de Github project
+## Inplémentation des des méthodes( insert, delete, select) depuis le serveur.
 
-Vous pouvez créer des cartes de tâches mais aussi des Issues. Les Issues sont normalement faites pour signaler des erreurs dans le codes. Et après vous pouvez assigner ces erreurs dans le tableau. Mais ici, vous pouvez les utiliser comme des tâches qu'il faut encore accomplir. 
+Selon la structure de DB en POC3, on implémente les méthode pour insert, delete et select.
