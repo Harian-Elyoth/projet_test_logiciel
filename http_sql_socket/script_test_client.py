@@ -72,9 +72,14 @@ while valid_password == False:
 		print("La requête a échouée, code error : " + str(error) + '\n')
 
 print("\nFélicitation, vous êtes connecté sur le meilleur chat des EISE5 !\n")
-print("Veuillez tapez room pour rejoindre la salon de test ou bien quit pour fermer l'application :\n")
+print("Veuillez tapez join pour rejoindre un salon, create pour creer un nouveau salon ou bien quit pour fermer l'application :\n")
 
-is_valid = False
+is_valid 	= False
+is_joining 	= False
+is_creating = False
+
+## CHOICE ACTION LOOP
+
 while (is_valid == False):
 
 	choice = input("> ")
@@ -84,28 +89,80 @@ while (is_valid == False):
 		print("\nNous sommes triste de vous voir quittez le meilleur chat des EISE5 !\n")
 		exit()
 
-	elif choice == 'room':
+	elif choice == 'join':
 		is_valid = True
 		
 		(error, resp) = client.request('GET', '/room', header, '')
 
 		if(error == 0):
-			if(resp == b'room : OK'):
-				print("Le salon de test est disponible :\n")
-			else:
-				print("Le salon de test n'est pas disponible.\n")
+			resp_str = resp.decode("utf-8")
+			
+			print("Liste des salons disponible :\n\n")
+			print(resp_str)
+
+			is_joining = True
 		else:
 			print("La requête a échouée, code error : " + str(error) + '\n')
+
+	elif choice == 'create':
+		is_valid = True
+
+		print("Vous allez maintenant créer un nouveau salon.")
+		is_creating = True
 
 	else:
 		print("Commande invalide, veuillez réesayer.")
 		is_valid = False
 
-print("Bienvenue sur le salon de test !\n")
+## JOIN ROOM CHOICE LOOP
+if is_joining == True:
+
+	room_exist == False
+	while room_exist == False:
+
+		print("Veuillez taper le nom du salon que vous souhaitez rejoindre.")
+		chan = input("> ")
+
+		(error, resp) = client.request('POST', '/room', header, chan)
+		if(error == 0):
+			if(resp == b'room : OK'):
+				print("Le salon " + chan + " est disponible.\n")
+				room_exist = True
+			else:
+				print("Le salon " + chan + " n'est pas disponible ou n'existe pas.\n")
+				room_exist = False
+		else:
+			print("La requête a échouée, code error : " + str(error) + '\n')
+			room_exist = False
+
+
+elif is_creating == True:
+
+	room_create = False
+	while room_create == False:
+
+		print("Veuillez taper le nom du salon que vous souhaitez créer.")
+		chan = input("> ")
+
+		(error, resp) = client.request('POST', '/create', header, chan)
+		if(error == 0):
+			if(resp == b'create : OK'):
+				print("Le salon " + chan + " est créé.\n")
+				room_create= True
+			else:
+				print("Vous ne pouvez pas créer le salon " + chan + ".\n")
+				room_create = False
+		else:
+			print("La requête a échouée, code error : " + str(error) + '\n')
+			room_exist = False
+
+print("Bienvenue sur le salon " + chan + " !")
 print("(taper quit pour fermer l'application)\n")
 
+print("\nVeuillez entrer votre message :")
+
 while (True):
-	print("Veuillez entrer votre message :\n")
+	print('\n')
 	mes = input("> ")
 
 	if mes == "quit":
@@ -116,7 +173,4 @@ while (True):
 
 	client_socket.send_message(mes)
 	time.sleep(1)
-
-
-
 
