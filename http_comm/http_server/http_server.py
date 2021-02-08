@@ -30,7 +30,14 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			body = 	b'room : OK'
+			resp = self.mysql.select("/Room/roomName")	
+			
+			resp_str = ''
+			for elem in resp:
+				resp_str += '-> ' + str(elem[0]) + '\n'
+
+			body = resp_str.encode()
+
 			self.wfile.write(body)
 
 		else:
@@ -95,6 +102,51 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 				body = 	b'password : OK'
 			else:
 				body = 	b'password : KO'
+
+			response = BytesIO()
+			response.write(body)
+
+			self.wfile.write(response.getvalue())
+
+		elif self.path == '/room':
+			self.send_response(200)
+
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+
+			content_length = int(self.headers['Content-Length'])
+			channel = self.rfile.read(content_length)
+
+			channel_str = channel.decode("utf-8")
+
+			resp = self.mysql.select(("/Room/roomName/roomName/" + channel_str))
+
+			if(len(resp) > 0):
+				body = 	b'room : OK'
+			else:
+				body = 	b'room : KO'
+
+			response = BytesIO()
+			response.write(body)
+
+		elif self.path == '/create':
+			self.send_response(200)
+
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+
+			content_length = int(self.headers['Content-Length'])
+			channel = self.rfile.read(content_length)
+
+			channel_str = channel.decode("utf-8")
+
+			query = {'roomName': [channel_str]}
+
+			# EVENTUAL CONDITION ON NEW ROOM'S NAME (LENGHT, SPEC CHAR)
+
+			resp = self.mysql.insert("/Room", query)
+
+			body = 	b'create : OK'
 
 			response = BytesIO()
 			response.write(body)
