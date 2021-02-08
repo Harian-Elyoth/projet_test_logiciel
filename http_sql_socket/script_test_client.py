@@ -3,15 +3,34 @@ import time
 from http_client import http_client
 from socket_comm import socket_comm
 
+print("Vous avez lancé la beta du meilleur chat des EISE5 !\n")
+print("Veuillez entrer 1 si vous êtes le 1er client et 2 si vous êtes le 2nd client\n")
+
+port_nb = 0
+is_valid = False
+while is_valid == False:
+
+	client_nb = input("> ")
+	if client_nb == "1":
+		is_valid = True
+		port_nb = 60002
+
+	elif client_nb == "2":
+		is_valid = True
+		port_nb = 60003
+
+	else:
+		print("Commande invalide, veuillez réesayer.\n")
+		is_valid = False
+
 print("Creation du websocket...\n")
-client_socket = socket_comm("127.0.0.1", 60001)
+client_socket = socket_comm("127.0.0.1", port_nb)
 client_socket.listen(5)
 time.sleep(3)
-client_socket.connect("127.0.0.1", 60000)
-
+client_socket.connect("127.0.0.1", 60001)
 
 print("Creation du client HTTP...\n")
-client = http_client("127.0.0.1", 65001, "127.0.0.1", 60000, 5)
+client = http_client("127.0.0.1", port_nb, "127.0.0.1", 60000, 5)
 header = {"Content-type": "text/plain"}
 
 (error, resp) = client.request('GET', '/', header, '')
@@ -79,13 +98,21 @@ while (is_valid == False):
 			print("La requête a échouée, code error : " + str(error) + '\n')
 
 	else:
+		print("Commande invalide, veuillez réesayer.")
 		is_valid = False
 
-print("Bienvenue sur le salon de test !\n\n")
+print("Bienvenue sur le salon de test !\n")
+print("(taper quit pour fermer l'application)\n")
 
 while (True):
 	print("Veuillez entrer votre message :\n")
 	mes = input("> ")
+
+	if mes == "quit":
+		print("\nNous sommes triste de vous voir quittez le meilleur chat des EISE5 !\n")
+		client_socket.stop_threads = True
+		time.sleep(2)
+		exit()
 
 	client_socket.send_message(mes)
 	time.sleep(1)
