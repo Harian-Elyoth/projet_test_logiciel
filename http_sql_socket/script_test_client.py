@@ -2,6 +2,7 @@ import time
 
 from http_client import http_client
 from socket_comm import socket_comm
+import Affichage
 
 print("Vous avez lancé la beta du meilleur chat des EISE5 !\n")
 print("Veuillez entrer 1 si vous êtes le 1er client et 2 si vous êtes le 2nd client\n")
@@ -43,20 +44,6 @@ if(error == 0):
 else:
 	print("La requête a échouée, code error : " + str(error) + '\n')
 
-valid_username = False
-while (valid_username == False):
-	print("Veuillez entrer votre identifiant:\n")
-	body = input("> ")
-	(error, resp) = client.request('POST', '/username', header, body)
-
-	if(error == 0):
-		if(resp == b'username : OK'):
-			valid_username = True
-		else:
-			print("Votre identifiant est incorrect.\n")
-	else:
-		print("La requête a échouée, code error : " + str(error) + '\n')
-
 valid_password = False
 while valid_password == False:
 	print("Veuillez entrer votre mots de passe:\n")
@@ -91,12 +78,12 @@ while (is_valid == False):
 
 	elif choice == 'join':
 		is_valid = True
-		
+
 		(error, resp) = client.request('GET', '/room', header, '')
 
 		if(error == 0):
 			resp_str = resp.decode("utf-8")
-			
+
 			print("Liste des salons disponible :\n\n")
 			print(resp_str)
 
@@ -173,4 +160,3 @@ while (True):
 
 	client_socket.send_message(mes)
 	time.sleep(1)
-
