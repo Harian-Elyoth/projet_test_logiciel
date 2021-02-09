@@ -90,9 +90,21 @@ def print_private_room(motcle):
         return True
     else:
         return False
-    return True
 
 def delete_room(motcle):
+
+    # si l'utilisateur a tapé "delete [num_room]" alors la fonction doit renvoyer True
+    if (len(motcle) < 8):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif(motcle[0:7] != "delete "):
+        return False
+    t = False
+    for i in range(8,len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == False):
+            print("erreur")
+            return False
     return True
 
 def create_room(motcle):
@@ -119,6 +131,7 @@ def main():
     ret3 = False
     ret4 = False
     ret5 = False
+    ret6 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -145,6 +158,14 @@ def main():
         print("Pour afficher une liste de toutes les rooms privees, tapez private")
         s = input()
         ret5 = print_private_room(s)
+
+    #delete
+    while(ret6 == False):
+        print("Pour supprimer une room, tapez delete [num_room]")
+        s = input()
+        ret6 = delete_room(s)
+
+
 
 
 if __name__ == '__main__':
