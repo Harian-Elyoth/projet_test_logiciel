@@ -109,7 +109,7 @@ def delete_room(motcle):
 
 def create_room(motcle):
     # si l'utilisateur a tapé "room" alors la fonction doit renvoyer True
-    
+
     #detection de chiffres
     t = False
     for i in range(len(motcle)):
@@ -129,7 +129,44 @@ def create_room(motcle):
 
 def invite_user(motcle):
     # si l'utilisateur a tapé "invite [other_user_name] [num_room]" alors la fonction doit renvoyer True
+    if (len(motcle) < 8):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+
+    #split du mot cle en fonction des separateurs
+    list_termes = motcle.split(' ')
+    if (len(list_termes) < 3):
+        print("vous n'avez pas rentré assez de termes")
+        return False
+
+    invite = list_termes[0]
+    user_name = list_termes[1]
+    num_room = list_termes[2]
+    print("invite : ")
+    print(invite)
+    print("USER NAME : ")
+    print(user_name)
+    print("len de user name:")
+    print(len(user_name))
+    print("num room : ")
+    print(num_room)
+
+    if(invite != "invite"):
+        print("le mot cle 'invite' a mal été orthographié")
+        return False
+
+    elif (len(user_name) == 0): # pas de user name
+        print("user name invalide")
+        return False
+
+    t = False
+    for i in range(len(num_room)):
+        t = (num_room[i].isdigit())
+        if ( t == False):
+            print("num room invalide")
+            return False
     return True
+
 
 def send_to_all(motcle):
     return True
@@ -151,6 +188,7 @@ def main():
     ret5 = False
     ret6 = False
     ret7 = False
+    ret8 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -187,9 +225,10 @@ def main():
         print("Pour ajouter une room, tapez room")
         s = input()
         ret7 = create_room(s)
-
-
-
-
+    #invite_user
+    while(ret8 == False):
+        print("Pour inviter un autre user à rejoindre une room, tapez invite [user_name] [num_room]")
+        s = input()
+        ret8 = invite_user(s)
 if __name__ == '__main__':
     main()
