@@ -7,9 +7,6 @@ def create_user(motcle):
     if (len(motcle) != 6):
         print("votre mot n'est pas de la bonne taille")
         return False
-    elif ( isinstance(motcle, str) == False  ):
-        print("votre mot cle n'est pas un string")
-        return False
     elif motcle == "create" :
         print("C'est exact !")
         return True
@@ -21,9 +18,6 @@ def connect_user(motcle):
     if (len(motcle) != 5):
         print("votre mot n'est pas de la bonne taille")
         return False
-    elif ( isinstance(motcle, str) == False ):
-        print("votre mot cle n'est pas un string")
-        return False
     elif motcle == "login" :
         print("C'est exact !")
         return True
@@ -31,7 +25,15 @@ def connect_user(motcle):
         return False
 
 def exit(motcle):
-    return True
+    if (len(motcle) != 4):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif motcle == "exit" :
+        print("C'est exact !")
+        return True
+    else:
+        return False
+
 
 def print_public_room(motcle):
     return True
@@ -60,18 +62,26 @@ def main():
     print("         Bienvenue              ")
     print("################################")
     print("")
-    #create user
+
     ret = False
     ret2 = False
+    ret3 = False
+    #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
         s = input()
         ret = create_user(s)
-
+    #log
     while(ret2 == False):
         print("Pour se logger, tapez login")
         s = input()
         ret2 = connect_user(s)
+
+    #exit
+    while(ret3 == False):
+        print("Pour sortir, tapez exit")
+        s = input()
+        ret3 = exit(s)
 
 if __name__ == '__main__':
     main()
