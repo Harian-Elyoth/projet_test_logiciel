@@ -2,7 +2,7 @@
 #     Authors : Yingshan LIU, Mingda WANG
 #************************************************/
 
-from class_interface import sql
+from sql import sql
 
 import unittest
 import os
