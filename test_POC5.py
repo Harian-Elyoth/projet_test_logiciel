@@ -84,7 +84,7 @@ class TestQuickToolsMethods(unittest.TestCase):
         # si l'utilisateur a tapé "invite [other_user_name] [num_room]" alors la fonction doit renvoyer True
         self.assertTrue(invite_user("invite other_user_name 0"))
         # si l'utilisateur a fait une faute de frappe alors la fonction doit renvoyer False
-        self.assertFalse(invite_user("invite 5 4"))
+        self.assertFalse(invite_user("invite simon5"))
         #si l'utilisateur inverse l'ordre des arguments :
         self.assertFalse(invite_user("invite 5 other_user_name"))
         #si l'utilisateur oublie un argument alors la fonction doit renvoyer False
