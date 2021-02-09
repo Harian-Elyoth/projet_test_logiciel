@@ -24,13 +24,17 @@ while is_valid == False:
 		is_valid = False
 
 print("Creation du websocket...\n")
-client_socket = socket_comm("127.0.0.1", port_nb)
-client_socket.listen(5)
+client_socket = socket_comm()
+
+client_socket.listen("127.0.0.1", port_nb, 5)
+
 time.sleep(3)
+
 client_socket.connect("127.0.0.1", 60001)
 
 print("Creation du client HTTP...\n")
 client = http_client("127.0.0.1", port_nb, "127.0.0.1", 60000, 5)
+
 header = {"Content-type": "text/plain"}
 
 (error, resp) = client.request('GET', '/', header, '')
@@ -44,11 +48,10 @@ else:
 	print("La requête a échouée, code error : " + str(error) + '\n')
 
 valid_username = False
-username = 'Vide'
 while (valid_username == False):
 	print("Veuillez entrer votre identifiant:\n")
-	username = input("> ")
-	(error, resp) = client.request('POST', '/username', header, username)
+	body = input("> ")
+	(error, resp) = client.request('POST', '/username', header, body)
 
 	if(error == 0):
 		if(resp == b'username : OK'):
@@ -62,7 +65,6 @@ valid_password = False
 while valid_password == False:
 	print("Veuillez entrer votre mots de passe:\n")
 	body = input("> ")
-	body=body+' '+username
 	(error, resp) = client.request('POST', '/password', header, body)
 
 	if(error == 0):
@@ -119,7 +121,7 @@ while (is_valid == False):
 ## JOIN ROOM CHOICE LOOP
 if is_joining == True:
 
-	room_exist == False
+	room_exist = False
 	while room_exist == False:
 
 		print("Veuillez taper le nom du salon que vous souhaitez rejoindre.")
