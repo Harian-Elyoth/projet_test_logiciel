@@ -1,8 +1,10 @@
+import http.server
+import sqlite3
+
+from io import BytesIO
 
 from sql import sql
-import http.server
-from io import BytesIO
-import sqlite3
+from socket_comm import socket_comm
 
 class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
@@ -10,6 +12,11 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	def __init__(self, *args, **kwargs):		
 		self.mysql = sql('chatsystem.db')
+
+		self.socket_serv = socket_comm()
+
+		self.count = 60001
+
 		super(handler_http_serv, self).__init__(*args, **kwargs)
 
 	"""handle GET request"""
@@ -61,7 +68,20 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			body = 	b'server : OK'
+			content_length = int(self.headers['Content-Length'])
+			addr = self.rfile.read(content_length)
+			addr = addr.decode("utf-8")
+
+			ip_cli, port_cli = addr.split('|')
+
+			port = self.count
+			self.count = self.count + 1
+
+			self.socket_serv.listen("127.0.0.1", port, 5)
+			self.socket_serv.connect(ip_cli, port_cli)
+
+			body = 'server : OK|127.0.0.1|' + str(port)
+			body = 	bytes(body, "utf-8")
 			self.wfile.write(body)
 
 		elif self.path == '/username':
@@ -214,8 +234,8 @@ class http_server(object):
 	"""called for initialize object (after new), return None"""
 	def __init__(self, ip, port):
 
-		self.ip 		= ip
-		self.port 		= port
+		self.ip 			= ip
+		self.port 			= port
 
 		try:
 			self.http_serv 	= http.server.ThreadingHTTPServer((self.ip, self.port), handler_http_serv)
@@ -223,6 +243,7 @@ class http_server(object):
 			print("Exception in http.server.ThreadingHTTPServer(..)")
 
 	def run(self):
+
 		try:
 			self.http_serv.serve_forever()
 		except KeyboardInterrupt:
