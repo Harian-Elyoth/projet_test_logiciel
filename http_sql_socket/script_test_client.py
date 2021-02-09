@@ -91,7 +91,7 @@ while (is_valid == False):
 
 	choice = input("> ")
 
-	if (Affichage.exit() == True):
+	if (Affichage.exit(choice) == True):
 		is_valid = True
 		print("\nNous sommes tristes de vous voir quitter le meilleur chat des EISE5 !\n")
 		exit()
@@ -111,13 +111,13 @@ while (is_valid == False):
 		else:
 			print("La requête a échouée, code error : " + str(error) + '\n')
 
-	elif (Affichage.create_room() == True):
+	elif (Affichage.create_room(choice) == True):
 		is_valid = True
 
 		print("Vous allez maintenant créer un nouveau salon.")
 		is_creating = True
 
-	elif(Affichage.delete_room()==True):
+	elif(Affichage.delete_room(choice)==True):
 
 		print("Vous allez supprimer un salon.")
 
