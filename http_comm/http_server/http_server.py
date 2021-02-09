@@ -116,13 +116,15 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 					else:
 						pwd_fin = True
 				else:
-					username+=letter
+					username += letter
 					
 			if verify_sql_injection(new_password_str):
 				
-      resp = self.mysql.select(("/User/username/password/" + new_password_str))
+				resp = self.mysql.select(("/User/username/password/" + new_password_str))
       
-				if(len(resp) > 0):
+      			 # and (username == resp[0][0])
+
+				if((len(resp) > 0)):
 					body = 	b'password : OK'
 				else:
 					body = 	b'password : KO'
@@ -156,6 +158,8 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			response = BytesIO()
 			response.write(body)
 
+			self.wfile.write(response.getvalue())
+
 		elif self.path == '/create':
 			self.send_response(200)
 
@@ -166,7 +170,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			channel = self.rfile.read(content_length)
 
 			channel_str = channel.decode("utf-8")
-			if verify_roomname(channel_str):
+			if verify_roomname(channel_str) and verify_sql_injection(channel_str):
 				query = {'roomName': [channel_str]}
 
 			# EVENTUAL CONDITION ON NEW ROOM'S NAME (LENGHT, SPEC CHAR)
