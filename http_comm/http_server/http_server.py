@@ -113,9 +113,6 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 					username+=letter
 						
 			
-			#print("username :", username)
-			#print("password :", new_password_str)
-			
 			resp = self.mysql.select(("/User/username/password/" + new_password_str))
 			
 			if(username==resp[0][0]):
