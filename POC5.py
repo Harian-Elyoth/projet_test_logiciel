@@ -108,9 +108,27 @@ def delete_room(motcle):
     return True
 
 def create_room(motcle):
-    return True
+    # si l'utilisateur a tapé "room" alors la fonction doit renvoyer True
+    
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
+    if (len(motcle) != 4):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif motcle == "room" :
+        print("C'est exact !")
+        return True
+    else:
+        return False
+
 
 def invite_user(motcle):
+    # si l'utilisateur a tapé "invite [other_user_name] [num_room]" alors la fonction doit renvoyer True
     return True
 
 def send_to_all(motcle):
@@ -132,6 +150,7 @@ def main():
     ret4 = False
     ret5 = False
     ret6 = False
+    ret7 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -158,12 +177,16 @@ def main():
         print("Pour afficher une liste de toutes les rooms privees, tapez private")
         s = input()
         ret5 = print_private_room(s)
-
     #delete
     while(ret6 == False):
         print("Pour supprimer une room, tapez delete [num_room]")
         s = input()
         ret6 = delete_room(s)
+    #room
+    while(ret7 == False):
+        print("Pour ajouter une room, tapez room")
+        s = input()
+        ret7 = create_room(s)
 
 
 
