@@ -23,7 +23,6 @@ class socket_comm(object):
 			clientsocket, address = socket_recv.accept()
 			self.client_address.append(address)
 
-
 			while True:
 				if self.stop_threads == True:
 					raise ValueError
