@@ -55,6 +55,22 @@ if(error == 0):
 else:
 	print("La requête a échouée, code error : " + str(error) + '\n')
 
+###Apres connecter###
+nouveau_client = input("Nouveau client?(O/N) ")
+if nouveau_client == "O" or nouveau_client == "o" :
+	firstname = input("firstname> ")
+	lastname = input("lastname> ")
+	username = input("username> ")
+	password = input("password> ")
+	chan = firstname+'.'+lastname+'.'+username+'.'+password
+	(error, resp) = client.request('POST', '/inscription', header, chan)
+	if(error == 0):
+
+		print("User " + username + " est cree.\n")
+
+	else:
+		print("La requête a échouée, code error : " + str(error) + '\n')
+	
 valid_username = False
 while (valid_username == False):
 	print("Veuillez entrer votre identifiant:\n")
