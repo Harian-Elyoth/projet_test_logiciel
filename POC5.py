@@ -4,10 +4,18 @@ from string import printable
 
 
 def create_user(motcle):
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
+    #verification de la taille
     if (len(motcle) != 6):
         print("votre mot n'est pas de la bonne taille")
         return False
-    elif motcle == "create" :
+    elif( motcle == "create"):
         print("C'est exact !")
         return True
     else:
@@ -15,6 +23,13 @@ def create_user(motcle):
 
 
 def connect_user(motcle):
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
     if (len(motcle) != 5):
         print("votre mot n'est pas de la bonne taille")
         return False
@@ -25,6 +40,13 @@ def connect_user(motcle):
         return False
 
 def exit(motcle):
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
     if (len(motcle) != 4):
         print("votre mot n'est pas de la bonne taille")
         return False
@@ -36,6 +58,13 @@ def exit(motcle):
 
 
 def print_public_room(motcle):
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
     if (len(motcle) != 6):
         print("votre mot n'est pas de la bonne taille")
         return False
@@ -46,6 +75,21 @@ def print_public_room(motcle):
         return False
 
 def print_private_room(motcle):
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
+    if (len(motcle) != 7):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif motcle == "private" :
+        print("C'est exact !")
+        return True
+    else:
+        return False
     return True
 
 def delete_room(motcle):
@@ -74,6 +118,7 @@ def main():
     ret2 = False
     ret3 = False
     ret4 = False
+    ret5 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -95,6 +140,12 @@ def main():
         print("Pour afficher une liste de toutes les rooms publiques, tapez public")
         s = input()
         ret4 = print_public_room(s)
+    #private
+    while(ret5 == False):
+        print("Pour afficher une liste de toutes les rooms privees, tapez private")
+        s = input()
+        ret5 = print_private_room(s)
+
 
 if __name__ == '__main__':
     main()
