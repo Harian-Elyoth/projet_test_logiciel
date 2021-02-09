@@ -8,7 +8,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	"""docstring for handler_http_serv class"""
 
-	def __init__(self, *args, **kwargs):		
+	def __init__(self, *args, **kwargs):
 		self.mysql = sql('chatsystem.db')
 		super(handler_http_serv, self).__init__(*args, **kwargs)
 
@@ -32,8 +32,8 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			resp = self.mysql.select("/Room/roomName")	
-			
+			resp = self.mysql.select("/Room/roomName")
+
 			resp_str = ''
 			for elem in resp:
 				resp_str += '-> ' + str(elem[0]) + '\n'
@@ -80,7 +80,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 					body = 	b'username : OK'
 				else:
 					body = 	b'username : KO'
-			else : 
+			else :
 				print("Attention SQL INJECTION DETECTEE")
 				body = 	b'username : KO'
 
@@ -88,7 +88,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 			response = BytesIO()
 			response.write(body)
-			
+
 			self.wfile.write(response.getvalue())
 
 		elif self.path == '/password':
@@ -107,7 +107,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 					body = 	b'password : OK'
 				else:
 					body = 	b'password : KO'
-			else : 
+			else :
 				print("Attention SQL INJECTION DETECTEE")
 				body = 	b'password : KO'
 
@@ -158,7 +158,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 				resp = self.mysql.insert("/Room", query)
 
 				body = 	b'create : OK'
-			else : 
+			else :
 				print("ROOMNAME INCORRECT")
 				body =  b'create : KO'
 
@@ -220,6 +220,7 @@ class http_server(object):
 		try:
 			self.http_serv 	= http.server.ThreadingHTTPServer((self.ip, self.port), handler_http_serv)
 		except:
+			self.htt_serv = http.server.ThreadingHTTPServer
 			print("Exception in http.server.ThreadingHTTPServer(..)")
 
 	def run(self):
@@ -254,7 +255,7 @@ def verify_roomname(roomname):
 			if len(rep)==0:
 				return True
 	return False
-	
+
 
 if __name__ == '__main__':
 
