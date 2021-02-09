@@ -187,6 +187,13 @@ def send_to_all(motcle):
         return False
 
 def send_to(motcle):
+    # si l'utilisateur a tapé "sendto [other user name]" alors la fonction doit renvoyer True
+
+    if (len(motcle) < 8):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif(motcle[0:7] != "sendto "):
+        return False
     return True
 
 
@@ -205,6 +212,7 @@ def main():
     ret7 = False
     ret8 = False
     ret9 = False
+    ret10 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -215,7 +223,6 @@ def main():
         print("Pour se logger, tapez login")
         s = input()
         ret2 = connect_user(s)
-
     #exit
     while(ret3 == False):
         print("Pour sortir, tapez exit")
@@ -251,6 +258,11 @@ def main():
         print("Pour envoyer un message à l'ensemble des utilisateurs, tapez sendtoall")
         s = input()
         ret9 = send_to_all(s)
+    #send_to
+    while (ret10 == False):
+        print("Pour envoyer un message a un seul utilisateur, tapez sendto [username]")
+        s = input()
+        ret10 = send_to(s)
 
 
 if __name__ == '__main__':
