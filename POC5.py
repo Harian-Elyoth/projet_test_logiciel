@@ -169,7 +169,22 @@ def invite_user(motcle):
 
 
 def send_to_all(motcle):
-    return True
+    # si l'utilisateur a tapé "sendtoall" alors la fonction doit renvoyer True
+    #detection de chiffres
+    t = False
+    for i in range(len(motcle)):
+        t = (motcle[i].isdigit())
+        if ( t == True):
+            print("votre mot contient un chiffre")
+            return False
+    if (len(motcle) != 9):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif motcle == "sendtoall" :
+        print("C'est exact !")
+        return True
+    else:
+        return False
 
 def send_to(motcle):
     return True
@@ -189,6 +204,7 @@ def main():
     ret6 = False
     ret7 = False
     ret8 = False
+    ret9 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -230,5 +246,12 @@ def main():
         print("Pour inviter un autre user à rejoindre une room, tapez invite [user_name] [num_room]")
         s = input()
         ret8 = invite_user(s)
+    #send_to_all
+    while (ret9 == False):
+        print("Pour envoyer un message à l'ensemble des utilisateurs, tapez sendtoall")
+        s = input()
+        ret9 = send_to_all(s)
+
+
 if __name__ == '__main__':
     main()
