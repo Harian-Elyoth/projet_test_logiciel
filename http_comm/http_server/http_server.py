@@ -1,6 +1,10 @@
-from sql import sql
 import http.server
+import sqlite3
+
 from io import BytesIO
+
+from sql import sql
+from socket_comm import socket_comm
 
 class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
@@ -8,6 +12,11 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	def __init__(self, *args, **kwargs):		
 		self.mysql = sql('chatsystem.db')
+
+		self.socket_serv = socket_comm()
+
+		self.count = 60001
+
 		super(handler_http_serv, self).__init__(*args, **kwargs)
 
 	"""handle GET request"""
@@ -59,7 +68,20 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 
-			body = 	b'server : OK'
+			content_length = int(self.headers['Content-Length'])
+			addr = self.rfile.read(content_length)
+			addr = addr.decode("utf-8")
+
+			ip_cli, port_cli = addr.split('|')
+
+			port = self.count
+			self.count = self.count + 1
+
+			self.socket_serv.listen("127.0.0.1", port, 5)
+			self.socket_serv.connect(ip_cli, port_cli)
+
+			body = 'server : OK|127.0.0.1|' + str(port)
+			body = 	bytes(body, "utf-8")
 			self.wfile.write(body)
 
 		elif self.path == '/username':
@@ -72,13 +94,17 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			username = self.rfile.read(content_length)
 
 			username_str = username.decode("utf-8")
-
-			resp = self.mysql.select(("/User/username/username/" + username_str))
-
-			if(len(resp) > 0):
-				body = 	b'username : OK'
-			else:
+			if verify_sql_injection(username_str):
+				resp = self.mysql.select(("/User/username/username/" + username_str))
+				if(len(resp) > 0):
+					body = 	b'username : OK'
+				else:
+					body = 	b'username : KO'
+			else : 
+				print("Attention SQL INJECTION DETECTEE")
 				body = 	b'username : KO'
+
+
 
 			response = BytesIO()
 			response.write(body)
@@ -95,13 +121,18 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			password = self.rfile.read(content_length)
 
 			password_str = password.decode("utf-8")
-
-			resp = self.mysql.select(("/User/password/password/" + password_str))
-
-			if(len(resp) > 0):
-				body = 	b'password : OK'
-			else:
+			if verify_sql_injection(password_str):
+				resp = self.mysql.select(("/User/password/password/" + password_str))
+				if(len(resp) > 0):
+					body = 	b'password : OK'
+				else:
+					body = 	b'password : KO'
+			else : 
+				print("Attention SQL INJECTION DETECTEE")
 				body = 	b'password : KO'
+
+
+
 
 			response = BytesIO()
 			response.write(body)
@@ -139,39 +170,17 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			channel = self.rfile.read(content_length)
 
 			channel_str = channel.decode("utf-8")
-
-			query = {'roomName': [channel_str]}
-
-			# EVENTUAL CONDITION ON NEW ROOM'S NAME (LENGHT, SPEC CHAR)
-
-			resp = self.mysql.insert("/Room", query)
-
-			body = 	b'create : OK'
-
-			response = BytesIO()
-			response.write(body)
-
-			self.wfile.write(response.getvalue())
-
-		elif self.path == '/inscription':
-			self.send_response(200)
-
-			self.send_header("Content-type", "text/plain")
-			self.end_headers()
-
-			content_length = int(self.headers['Content-Length'])
-			channel = self.rfile.read(content_length)
-
-			channel_str = channel.decode("utf-8")
-			strs = []
-			strs = channel_str.split(".")
-			query = {'firstName ': [strs[0]],'lastName': [strs[1]],'username': [strs[2]],'password': [strs[3]]}
+			if verify_roomname(channel_str):
+				query = {'roomName': [channel_str]}
 
 			# EVENTUAL CONDITION ON NEW ROOM'S NAME (LENGHT, SPEC CHAR)
 
-			resp = self.mysql.insert("/User", query)
+				resp = self.mysql.insert("/Room", query)
 
-			body = 	b'inscription : OK'
+				body = 	b'create : OK'
+			else : 
+				print("ROOMNAME INCORRECT")
+				body =  b'create : KO'
 
 			response = BytesIO()
 			response.write(body)
@@ -225,8 +234,8 @@ class http_server(object):
 	"""called for initialize object (after new), return None"""
 	def __init__(self, ip, port):
 
-		self.ip 		= ip
-		self.port 		= port
+		self.ip 			= ip
+		self.port 			= port
 
 		try:
 			self.http_serv 	= http.server.ThreadingHTTPServer((self.ip, self.port), handler_http_serv)
@@ -234,6 +243,7 @@ class http_server(object):
 			print("Exception in http.server.ThreadingHTTPServer(..)")
 
 	def run(self):
+
 		try:
 			self.http_serv.serve_forever()
 		except KeyboardInterrupt:
@@ -244,6 +254,28 @@ class http_server(object):
 	def __del__(self):
 		self.http_serv.server_close()
 		# pass
+
+#return true si il n'y a pas de risque d'injection sql
+#false sinon
+def verify_sql_injection(request):
+	banlist = ["\'", "--", ";", "\"", "OR", "SELECT", "DROP", "UNION", "UPDATE", "DELETE", "INSERT"]
+	#print(not(any(request.upper().count(banlist[i]) >= 1 for i in range(len(banlist)))))
+	return not(any(request.upper().count(banlist[i]) >= 1 for i in range(len(banlist))))
+
+#Limite de caractere
+def verify_roomname(roomname):
+	special_characters = "!#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+	if not any(char in special_characters for char in roomname):
+		#Si il ne contient aucun symbole
+		if len(roomname) <= 40 :
+			connect = sqlite3.connect('chatsystem.db')
+			cursor = connect.cursor()
+			sql = 'SELECT * FROM Room WHERE roomName="%s"' %(roomname)
+			rep = cursor.execute(sql).fetchall()
+			if len(rep)==0:
+				return True
+	return False
+	
 
 if __name__ == '__main__':
 

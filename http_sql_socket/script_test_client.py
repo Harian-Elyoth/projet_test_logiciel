@@ -6,60 +6,54 @@ from socket_comm import socket_comm
 print("Vous avez lancé la beta du meilleur chat des EISE5 !\n")
 print("Veuillez entrer 1 si vous êtes le 1er client et 2 si vous êtes le 2nd client\n")
 
-port_nb = 0
+port_http_cli = 0
 is_valid = False
 while is_valid == False:
 
 	client_nb = input("> ")
 	if client_nb == "1":
-		is_valid = True
-		port_nb = 60002
+		is_valid 	= True
+		port_list 	= 60003
+		port_send 	= 60001
+		port_http_cli = 50001
 
 	elif client_nb == "2":
-		is_valid = True
-		port_nb = 60003
+		is_valid 	= True
+		port_list 	= 60004
+		port_send 	= 60002
+		port_http_cli = 50002
 
 	else:
 		print("Commande invalide, veuillez réesayer.\n")
 		is_valid = False
 
 print("Creation du websocket...\n")
-client_socket = socket_comm("127.0.0.1", port_nb)
-client_socket.listen(5)
-time.sleep(3)
-client_socket.connect("127.0.0.1", 60001)
+client_socket = socket_comm()
+
+client_socket.listen("127.0.0.1", port_list, 5)
+
+time.sleep(1)
 
 print("Creation du client HTTP...\n")
-client = http_client("127.0.0.1", port_nb, "127.0.0.1", 60000, 5)
+client = http_client("127.0.0.1", port_http_cli, "127.0.0.1", 60000, 5)
+
 header = {"Content-type": "text/plain"}
 
-(error, resp) = client.request('GET', '/', header, '')
+body = '127.0.0.1|' + str(port_list)
+(error, resp) = client.request('POST', '/', header, body)
 
 if(error == 0):
-	if(resp == b'server : OK'):
+
+	resp = resp.decode("utf-8")
+	resp, ip_serv, port_serv = resp.split('|')
+	client_socket.connect(ip_serv, port_serv)
+
+	if(resp == 'server : OK'):
 		print("Le serveur est disponible:\n")
 	else:
 		print("Le serveur n'est pas disponible.\n")
 else:
 	print("La requête a échouée, code error : " + str(error) + '\n')
-
-
-###Apres connecter###
-nouveau_client = input("Nouveau client?(O/N) ")
-if nouveau_client == "O" or nouveau_client == "o" :
-	firstname = input("firstname> ")
-	lastname = input("lastname> ")
-	username = input("username> ")
-	password = input("password> ")
-	chan = firstname+'.'+lastname+'.'+username+'.'+password
-	(error, resp) = client.request('POST', '/inscription', header, chan)
-	if(error == 0):
-
-		print("User " + username + " est cree.\n")
-
-	else:
-		print("La requête a échouée, code error : " + str(error) + '\n')
-
 
 valid_username = False
 while (valid_username == False):
@@ -135,7 +129,7 @@ while (is_valid == False):
 ## JOIN ROOM CHOICE LOOP
 if is_joining == True:
 
-	room_exist == False
+	room_exist = False
 	while room_exist == False:
 
 		print("Veuillez taper le nom du salon que vous souhaitez rejoindre.")
@@ -191,3 +185,4 @@ while (True):
 
 	client_socket.send_message(mes)
 	time.sleep(1)
+
