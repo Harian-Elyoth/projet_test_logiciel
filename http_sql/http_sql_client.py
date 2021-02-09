@@ -15,8 +15,9 @@ else:
 
 valid_username = False
 while (valid_username == False):
-	body = input("Veuillez entrer votre identifiant:\n")
-	(error, resp) = client.request('POST', '/username', header, body)
+	username = input("Veuillez entrer votre identifiant:\n")
+	(error, resp) = client.request('POST', '/username', header, username)
+	print("Body : ", username) 
 
 	if(error == 0):
 		if(resp == b'username : OK'):

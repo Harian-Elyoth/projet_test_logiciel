@@ -4,6 +4,8 @@ import http.server
 from io import BytesIO
 import sqlite3
 
+
+
 class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	"""docstring for handler_http_serv class"""
@@ -101,8 +103,25 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			password = self.rfile.read(content_length)
 
 			password_str = password.decode("utf-8")
-			if verify_sql_injection(password_str):
-				resp = self.mysql.select(("/User/password/password/" + password_str))
+			
+			new_password_str = ""
+			username = ""
+			
+			pwd_fin = False
+			
+			for letter in password_str:
+				if (not pwd_fin):
+					if letter != ' ':
+						new_password_str+=letter
+					else:
+						pwd_fin = True
+				else:
+					username+=letter
+					
+			if verify_sql_injection(new_password_str):
+				
+      resp = self.mysql.select(("/User/username/password/" + new_password_str))
+      
 				if(len(resp) > 0):
 					body = 	b'password : OK'
 				else:
@@ -110,9 +129,6 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			else :
 				print("Attention SQL INJECTION DETECTEE")
 				body = 	b'password : KO'
-
-
-
 
 			response = BytesIO()
 			response.write(body)
