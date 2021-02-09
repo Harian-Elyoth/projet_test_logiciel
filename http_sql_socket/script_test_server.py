@@ -11,11 +11,14 @@ if __name__ == '__main__':
 	serv_test = http_server("127.0.0.1", 60000)
 
 	print("Creation du websocket...\n")
-	server_socket = socket_comm("127.0.0.1", 60001)
-	server_socket.listen(5)
+	server_socket = socket_comm()
+	
+	server_socket.listen("127.0.0.1", 60001, 5)
+	
 	time.sleep(3)
+
 	server_socket.connect("127.0.0.1", 60002)
-	# server_socket.connect("127.0.0.1", 60003)
+	server_socket.connect("127.0.0.1", 60003)
 
 	print("Lancement du Serveur HTTP...\n")
 	serv_test.run()
