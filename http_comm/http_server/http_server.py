@@ -15,7 +15,7 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 		self.socket_serv = socket_comm()
 
-		self.count = 60001
+		self.count = 60500
 
 		super(handler_http_serv, self).__init__(*args, **kwargs)
 
@@ -72,10 +72,20 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			addr = self.rfile.read(content_length)
 			addr = addr.decode("utf-8")
 
+			print(addr)
+
 			ip_cli, port_cli = addr.split('|')
+
+			print('ip_cli')
+			print(ip_cli)
+			print('port_cli')
+			print(port_cli)
 
 			port = self.count
 			self.count = self.count + 1
+
+			print('port')
+			print(port)
 
 			self.socket_serv.listen("127.0.0.1", port, 5)
 			self.socket_serv.connect(ip_cli, port_cli)
@@ -131,9 +141,6 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 				print("Attention SQL INJECTION DETECTEE")
 				body = 	b'password : KO'
 
-
-
-
 			response = BytesIO()
 			response.write(body)
 
@@ -159,6 +166,8 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 			response = BytesIO()
 			response.write(body)
+
+			self.wfile.write(response.getvalue())
 
 		elif self.path == '/create':
 			self.send_response(200)
