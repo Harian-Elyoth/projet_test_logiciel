@@ -34,10 +34,12 @@ class test_integration(unittest.TestCase):
 
 		self.assertEqual(good_client_class.request('GET', '/', good_header, ''), (0, b''))
 
-		# kill the test server
+		# kill the test server and client
+		command = 'kill -9 $(lsof -t -i tcp:65500)'
+		os.system(command)
 		command = 'kill -9 $(lsof -t -i tcp:60000)'
 		os.system(command)
-		time.sleep(1) # wait for the server to be properly exit
+		time.sleep(1)
 
 		self.kill_subprocess()
 
@@ -59,10 +61,12 @@ class test_integration(unittest.TestCase):
 
 		self.assertEqual(good_client_class.request('GET', '/room', good_header, ''), (-8, 'test : KO'))
 
-		# kill the test server
+		# kill the test server and client
+		command = 'kill -9 $(lsof -t -i tcp:65500)'
+		os.system(command)
 		command = 'kill -9 $(lsof -t -i tcp:60000)'
 		os.system(command)
-		time.sleep(1) # wait for the server to be properly exit
+		time.sleep(1)
 
 		self.kill_subprocess()
 
@@ -88,10 +92,12 @@ class test_integration(unittest.TestCase):
 
 		self.assertEqual(good_client_class.request('POST', '/', good_header, 'Hello Server !'), (0, b''))
 
-		# kill the test server
+		# kill the test server and client
+		command = 'kill -9 $(lsof -t -i tcp:65500)'
+		os.system(command)
 		command = 'kill -9 $(lsof -t -i tcp:60000)'
 		os.system(command)
-		time.sleep(1) # wait for the server to be properly exit
+		time.sleep(1)
 
 		self.kill_subprocess()
 
@@ -113,10 +119,12 @@ class test_integration(unittest.TestCase):
 
 		self.assertEqual(good_client_class.request('POST', '/room', good_header, 'Hello Server !'), (-8, "test : KO"))
 
-		# kill the test server
+		# kill the test server and client
+		command = 'kill -9 $(lsof -t -i tcp:65500)'
+		os.system(command)
 		command = 'kill -9 $(lsof -t -i tcp:60000)'
 		os.system(command)
-		time.sleep(1) # wait for the server to be properly exit
+		time.sleep(1)
 
 		self.kill_subprocess()
 
