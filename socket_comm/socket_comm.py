@@ -96,7 +96,7 @@ class socket_comm(object):
 			self.sockets_recv[-1].bind((ip, port))
 			self.sockets_recv[-1].listen(backlog_size)
 		except socket.error:
-			return -7
+			return -5
 
 		threading.Thread(target=self.__thread_listen, args=(self.sockets_recv[-1],)).start()
 		return 0
