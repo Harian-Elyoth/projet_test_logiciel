@@ -4,7 +4,14 @@ from string import printable
 
 
 def create_user(motcle):
-    return True
+    if (len(motcle) != 6):
+        return False
+    elif ( isinstance(motcle, str) == False  ):
+        return False
+    elif motcle == "create" :
+        return True
+    else:
+        return False
 
 
 def connect_user(motcle):
@@ -33,3 +40,13 @@ def send_to_all(motcle):
 
 def send_to(motcle):
     return True
+
+
+def main():
+    print("Pour creer un user, tapez create")
+    s = input()
+    print(s)
+    print(create_user(s))
+
+if __name__ == '__main__':
+    main()
