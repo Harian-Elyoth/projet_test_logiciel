@@ -44,10 +44,11 @@ else:
 	print("La requête a échouée, code error : " + str(error) + '\n')
 
 valid_username = False
+username = 'Vide'
 while (valid_username == False):
 	print("Veuillez entrer votre identifiant:\n")
-	body = input("> ")
-	(error, resp) = client.request('POST', '/username', header, body)
+	username = input("> ")
+	(error, resp) = client.request('POST', '/username', header, username)
 
 	if(error == 0):
 		if(resp == b'username : OK'):
@@ -61,6 +62,7 @@ valid_password = False
 while valid_password == False:
 	print("Veuillez entrer votre mots de passe:\n")
 	body = input("> ")
+	body=body+' '+username
 	(error, resp) = client.request('POST', '/password', header, body)
 
 	if(error == 0):

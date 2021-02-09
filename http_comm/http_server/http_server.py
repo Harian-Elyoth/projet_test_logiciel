@@ -2,6 +2,8 @@ from sql import sql
 import http.server
 from io import BytesIO
 
+
+
 class handler_http_serv(http.server.BaseHTTPRequestHandler):
 
 	"""docstring for handler_http_serv class"""
@@ -95,10 +97,28 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			password = self.rfile.read(content_length)
 
 			password_str = password.decode("utf-8")
-
-			resp = self.mysql.select(("/User/password/password/" + password_str))
-
-			if(len(resp) > 0):
+			
+			new_password_str = ""
+			username = ""
+			
+			pwd_fin = False
+			
+			for letter in password_str:
+				if (not pwd_fin):
+					if letter != ' ':
+						new_password_str+=letter
+					else:
+						pwd_fin = True
+				else:
+					username+=letter
+						
+			
+			#print("username :", username)
+			#print("password :", new_password_str)
+			
+			resp = self.mysql.select(("/User/username/password/" + new_password_str))
+			
+			if(username==resp[0][0]):
 				body = 	b'password : OK'
 			else:
 				body = 	b'password : KO'
