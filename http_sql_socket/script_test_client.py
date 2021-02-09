@@ -80,7 +80,7 @@ while valid_password == False:
 
 print("\nFélicitation, vous êtes connecté sur le meilleur chat des EISE5 !\n")
 print("Veuillez tapez join pour rejoindre un salon, create pour creer un nouveau salon ou bien quit pour fermer l'application :\n")
-
+print("")
 is_valid 	= False
 is_joining 	= False
 is_creating = False
@@ -91,9 +91,9 @@ while (is_valid == False):
 
 	choice = input("> ")
 
-	if choice == 'quit':
+	if (Affichage.exit() == True):
 		is_valid = True
-		print("\nNous sommes triste de vous voir quitter le meilleur chat des EISE5 !\n")
+		print("\nNous sommes tristes de vous voir quitter le meilleur chat des EISE5 !\n")
 		exit()
 
 	elif choice == 'join':
@@ -111,15 +111,20 @@ while (is_valid == False):
 		else:
 			print("La requête a échouée, code error : " + str(error) + '\n')
 
-	elif choice == 'create':
+	elif (Affichage.create_room() == True):
 		is_valid = True
 
 		print("Vous allez maintenant créer un nouveau salon.")
 		is_creating = True
 
+	elif(Affichage.delete_room()==True):
+
+		print("Vous allez supprimer un salon.")
+
 	else:
-		print("Commande invalide, veuillez réesayer.")
+		print("Commande invalide, veuillez réessayer.")
 		is_valid = False
+
 
 ## JOIN ROOM CHOICE LOOP
 if is_joining == True:
