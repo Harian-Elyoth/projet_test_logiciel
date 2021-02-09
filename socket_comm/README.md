@@ -1,5 +1,9 @@
 # Spécification des codes erreurs pour la communication par socket
 
+## Premier delivrable
+
+Branche contenant le premier delivrable pour le communication par socket bi-directionnelle pour une connection unique. 
+
 Fonction __new__ de socket_comm :
 
 		-> -1  : L'adresse IP n'a pas le bon type
