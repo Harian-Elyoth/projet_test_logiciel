@@ -81,7 +81,7 @@ class test_http_server(unittest.TestCase):
 		self.list_subprocess.append(p)
 		time.sleep(1) # wait for the server to be properly init
 
-		url 	= "http://127.0.0.1:60000/room"
+		url 	= "http://127.0.0.1:60000/room32"
 		resp 	= requests.get(url)
 
 		self.assertEqual(resp.status_code, 404)
@@ -134,7 +134,7 @@ class test_http_server(unittest.TestCase):
 		self.list_subprocess.append(p)
 		time.sleep(1) # wait for the server to be properly init
 
-		url 	= "http://127.0.0.1:60000/room"
+		url 	= "http://127.0.0.1:60000/room32"
 		payload = "test"
 		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
