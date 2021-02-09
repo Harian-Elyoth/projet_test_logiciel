@@ -7,6 +7,8 @@ Selon la structure de DB en POC3, on implémente les méthode pour insert, delet
 
 9/2/2021
 Nouveau tache : inscription des utilisateur
-Modifier les fiches：
--http_server.py
--script_test_client.py
+V1：Modifier les fiches：
+-http_server.py(ajouter ligne 156-180)
+-script_test_client.py(ajouter ligne 46-62)
+
+
