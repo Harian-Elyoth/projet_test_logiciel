@@ -19,4 +19,4 @@ jobs:
         pip install pylint
     - name: test unitaire  
       run: |
-        python3 -m unittest *.py   
+        python3 scriptLancementUnittest.py
