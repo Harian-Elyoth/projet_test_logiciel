@@ -36,7 +36,14 @@ def exit(motcle):
 
 
 def print_public_room(motcle):
-    return True
+    if (len(motcle) != 6):
+        print("votre mot n'est pas de la bonne taille")
+        return False
+    elif motcle == "public" :
+        print("C'est exact !")
+        return True
+    else:
+        return False
 
 def print_private_room(motcle):
     return True
@@ -66,6 +73,7 @@ def main():
     ret = False
     ret2 = False
     ret3 = False
+    ret4 = False
     #create user
     while(ret == False):
         print("Pour creer un user, tapez create")
@@ -82,6 +90,11 @@ def main():
         print("Pour sortir, tapez exit")
         s = input()
         ret3 = exit(s)
+    #public
+    while(ret4 == False):
+        print("Pour afficher une liste de toutes les rooms publiques, tapez public")
+        s = input()
+        ret4 = print_public_room(s)
 
 if __name__ == '__main__':
     main()
