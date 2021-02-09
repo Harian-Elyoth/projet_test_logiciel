@@ -1,9 +1,9 @@
 from socket_comm import socket_comm
 import time
 
-server_socket = socket_comm("127.0.0.1", 60001)
-server_socket.listen(5)
-time.sleep(3)
+server_socket = socket_comm()
+server_socket.listen("127.0.0.1", 60001, 5)
+time.sleep(1)
 
 server_socket.connect("127.0.0.1", 60000)
 time.sleep(.5)
