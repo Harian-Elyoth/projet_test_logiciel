@@ -186,6 +186,30 @@ class handler_http_serv(http.server.BaseHTTPRequestHandler):
 			response.write(body)
 
 			self.wfile.write(response.getvalue())
+		elif self.path == '/inscription':
+			self.send_response(200)
+
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+
+			content_length = int(self.headers['Content-Length'])
+			channel = self.rfile.read(content_length)
+
+			channel_str = channel.decode("utf-8")
+			strs = []
+			strs = channel_str.split(".")
+			query = {'firstName ': [strs[0]],'lastName': [strs[1]],'username': [strs[2]],'password': [strs[3]]}
+
+			# EVENTUAL CONDITION ON NEW ROOM'S NAME (LENGHT, SPEC CHAR)
+
+			resp = self.mysql.insert("/User", query)
+
+			body = 	b'inscription : OK'
+
+			response = BytesIO()
+			response.write(body)
+
+			self.wfile.write(response.getvalue())
 
 		else:
 			self.send_response(404)
