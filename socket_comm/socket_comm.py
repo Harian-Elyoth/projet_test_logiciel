@@ -96,7 +96,7 @@ class socket_comm(object):
 			self.sockets_recv[-1].bind((ip, port))
 			self.sockets_recv[-1].listen(backlog_size)
 		except socket.error:
-			return -2
+			return -7
 
 		threading.Thread(target=self.__thread_listen, args=(self.sockets_recv[-1],)).start()
 		return 0
@@ -148,7 +148,6 @@ class socket_comm(object):
 		return 0
 
 	def send_message(self, message):
-		print('send_message')
 		for i in range(len(self.send_msgs)):
 			self.send_mutexs[i].acquire()
 			self.send_msgs[i] = message
