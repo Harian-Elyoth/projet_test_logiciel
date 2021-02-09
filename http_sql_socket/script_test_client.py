@@ -3,8 +3,28 @@ import time
 from http_client import http_client
 from socket_comm import socket_comm
 import Affichage
+print("####################################################")
+print("         Bienvenue              ")
+print("Vous avez lancé la beta du meilleur chat des EISE5 !")
+print("####################################################\n")
 
-print("Vous avez lancé la beta du meilleur chat des EISE5 !\n")
+
+print("###Voici la liste des commandes que vous pouvez saisir sur ce chat :\n ")
+print("###commandes USER")
+print("### $create : creation de compte utilisateur")
+print("### $login : connexion à un compte utilisateur")
+print("### $exit : se deconnecter")
+print("###commandes ROOM")
+print("### $room : ajout d'une room")
+print("### $public : affichage des public rooms")
+print("### $private : affichage des private rooms")
+print("### $delete [num_room]: supprimer la room n°[num_room]")
+print("### $invite [other_user_name] [num_room] : inviter le user [other_user_name] a rejoindre la room [num_room]")
+print("###commandes MESSAGE")
+print("### $sendtoall : envoyer le message à tous les utilisateurs")
+print("### $sendto [other_user_name] :  envoyer un message à l'utilisateur [other_user_name]\n")
+
+
 print("Veuillez entrer 1 si vous êtes le 1er client et 2 si vous êtes le 2nd client\n")
 
 port_nb = 0
@@ -46,7 +66,7 @@ else:
 
 valid_password = False
 while valid_password == False:
-	print("Veuillez entrer votre mots de passe:\n")
+	print("Veuillez entrer votre mot de passe:\n")
 	body = input("> ")
 	(error, resp) = client.request('POST', '/password', header, body)
 
@@ -54,7 +74,7 @@ while valid_password == False:
 		if(resp == b'password : OK'):
 			valid_password = True
 		else:
-			print("Votre mots de passe est incorrect.\n")
+			print("Votre mot de passe est incorrect.\n")
 	else:
 		print("La requête a échouée, code error : " + str(error) + '\n')
 
@@ -73,7 +93,7 @@ while (is_valid == False):
 
 	if choice == 'quit':
 		is_valid = True
-		print("\nNous sommes triste de vous voir quittez le meilleur chat des EISE5 !\n")
+		print("\nNous sommes triste de vous voir quitter le meilleur chat des EISE5 !\n")
 		exit()
 
 	elif choice == 'join':
